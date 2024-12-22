@@ -4,9 +4,8 @@ import {Button} from "@/components/ui/button";
 
 export default function Home() {
   return (
-    <div className="w-full min-w-screen flex min-h-screen  p-8 pb-20 sm:p-20 bg-amber-50 flex-col">
-        <main className="">
-            <Button/>
+    <div className="w-full min-w-screen flex min-h-screen p-8 pb-20 sm:p-20 flex-col">
+        <main className="flex flex-row h-screen">
             <Latest/>
             <Top/>
         </main>
