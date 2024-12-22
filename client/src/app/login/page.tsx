@@ -1,13 +1,21 @@
+"use client"
 import {LoginForm} from "@/components/ui/custom/login-form";
+import {useSession} from "next-auth/react";
+import {useRouter} from "next/navigation";
 
 export default function LoginPage() {
+    const {data,status}=useSession();
+    const router=useRouter()
+    console.log(data,status)
+    if(status==="loading"){
+        return <div>Loading...</div>
+    }
+    if(status==="authenticated"){
+        router.push("/")
+    }
     return (
-        <div className="w-full min-w-screen flex p-8 pb-20 sm:p-20 flex-col">
-            <div className="flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
+        <div className="flex flex-grow justify-center items-center">
           <LoginForm/>
-            </div>
-
-
         </div>
     );
 }

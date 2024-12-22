@@ -4,7 +4,8 @@ import "./globals.css";
 import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
 import ScreenSizeIndicator from "@/components/ScreenSizeIndicator";
-import {ThemeProvider} from "../components/theme-provider";
+import {ThemeProvider} from "../providers/theme-provider";
+import AuthProvider from "@/providers/auth-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,19 +30,21 @@ export default function RootLayout({
     return (
         <html lang="en">
         <body
-            className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+            className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
         >
-        <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-        >
-        <Navbar/>
-        {children}
-        <ScreenSizeIndicator/>
-        <Footer/>
-        </ThemeProvider>
+        <AuthProvider>
+            <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+            >
+                    <Navbar/>
+                    {children}
+                    <ScreenSizeIndicator/>
+                    <Footer/>
+            </ThemeProvider>
+        </AuthProvider>
         </body>
         </html>
   );

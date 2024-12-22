@@ -3,16 +3,18 @@
 import {useState} from "react";
 import Link from "next/link";
 import {Button} from "@/components/ui/button";
+import {signIn, useSession} from "next-auth/react";
+import {signOut} from "next-auth/react";
 
 export default function AuthLink() {
-    const [isLogined,setIsLogined]=useState<boolean>(false)
+    const {data,status}=useSession();
     return (
         <div>
-            {!isLogined && <Button>Log in</Button>}
-            {isLogined &&
-                <div>Write Log out etc
+            {status === "unauthenticated" && <Button>Log in</Button>}
+            {status === "authenticated" &&
+                <div className="flex flex-row gap-5">
                     <Link href="/new">Write</Link>
-                    <Link href="/new">Log out</Link>
+                    <Button onClick={()=>{signIn("google");}}>Log out</Button>
                 </div>}
 
         </div>
