@@ -34,7 +34,7 @@ export function LoginForm({
                                     <FontAwesomeIcon className="w-6 h-6" icon={faGoogle}/>
                                     Login with Google
                                 </Button>
-                                <Button variant="outline" className="w-full">
+                                <Button variant="outline" className="w-full" onClick={()=>{signIn("github")}}>
                                     <FontAwesomeIcon className="w-6 h-6" icon={faGithub}/>
                                     Login with GitHub
                                 </Button>
@@ -72,7 +72,7 @@ export function LoginForm({
                             </div>
                             <div className="text-center text-sm">
                                 Don&apos;t have an account?{" "}
-                                <a href="#" className="underline underline-offset-4">
+                                <a href="/signup" className="underline underline-offset-4">
                                     Sign up
                                 </a>
                             </div>
