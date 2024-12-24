@@ -9,6 +9,41 @@ export default {
   ],
   theme: {
   	extend: {
+		typography: {
+			DEFAULT: {
+				css: {
+					color: '#333',
+					h1: {
+						color: '#000',
+						fontWeight: 'bold',
+					},
+					a: {
+						color: '#007acc',
+						'&:hover': {
+							color: '#005b99',
+						},
+					},
+				},
+			},
+			dark: {
+				css: {
+					color: '#ddd',
+					h1: {
+						color: '#fff',
+					},
+					a: {
+						color: '#66d9ef',
+						'&:hover': {
+							color: '#2aa198',
+						},
+					},
+					blockquote: {
+						color: '#aaa',
+						borderLeftColor: '#444',
+					},
+				},
+			},
+		},
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
@@ -58,5 +93,5 @@ export default {
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"),require('@tailwindcss/typography')],
 } satisfies Config;

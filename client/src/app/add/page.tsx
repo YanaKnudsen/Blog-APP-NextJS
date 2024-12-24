@@ -8,6 +8,10 @@ import {Label} from "@/components/ui/label";
 import slugify from "slugify";
 import {useRouter} from "next/navigation";
 import {useRef, useState} from "react";
+import { remark } from 'remark';
+import html from 'remark-html';
+import matter from "gray-matter";
+import { Textarea } from "@/components/ui/textarea"
 
 const PostSchema = z.object({
     title: z
@@ -28,7 +32,26 @@ const PostSchema = z.object({
 
 export default function AddPost() {
     const [file, setFile] = useState<string>();
-    const [fileEnter, setFileEnter] = useState(false);
+    const [markdownHtml, setMarkdownHtml] = useState<string | null>(null);
+
+        async function fetchMarkdown() {
+            const res = await fetch("/api/read-markdown");
+            if (res.ok) {
+                const data = await res.json();
+                // Use gray-matter to parse the post metadata section
+                const matterResult = matter(data);
+                console.log("matter",matterResult);
+                // Use remark to convert markdown into HTML string
+                const processedContent = await remark()
+                    .use(html)
+                    .process(matterResult.content);
+                const contentHtml = processedContent.toString();
+                console.log(contentHtml)
+                setMarkdownHtml(contentHtml);
+            }
+        }
+
+
 
     const form= useForm<typeof PostSchema>({
         resolver: zodResolver(PostSchema),
@@ -59,15 +82,13 @@ export default function AddPost() {
 
     }
 
-    const formData = new FormData();
-    formData.append("file", file);
 
-    async function saveFile(){
-        console.log("saving File");
-        const res=await fetch("/api/upload",{
-            method:"POST",
-            body: formData,
-        })
+    async function readFile(){
+        console.log("reading Markdown file");
+        fetchMarkdown();
+      //  const files=fs.readdirSync(`${process.cwd()}/content,'utf-8'`)
+
+
 
     }
 
@@ -79,82 +100,9 @@ export default function AddPost() {
             </h1>
             <div>
             <div className="flex flex-col">
-                <Button onClick={saveFile}>save img</Button>
+                <Button onClick={readFile}>add markdown</Button>
+                {markdownHtml &&  <div className="prose mx-auto" dangerouslySetInnerHTML={{ __html:  markdownHtml|| ""  }}  />}
 
-                <div className="container px-4 max-w-5xl mx-auto">
-                    {!file ? (
-                        <div
-                            onDragOver={(e) => {
-                                e.preventDefault();
-                                setFileEnter(true);
-                            }}
-                            onDragLeave={(e) => {
-                                setFileEnter(false);
-                            }}
-                            onDragEnd={(e) => {
-                                e.preventDefault();
-                                setFileEnter(false);
-                            }}
-                            onDrop={(e) => {
-                                e.preventDefault();
-                                setFileEnter(false);
-                                if (e.dataTransfer.items) {
-                                    [...e.dataTransfer.items].forEach((item, i) => {
-                                        if (item.kind === "file") {
-                                            const file = item.getAsFile();
-                                            if (file) {
-                                                let blobUrl = URL.createObjectURL(file);
-                                                setFile(blobUrl);
-                                            }
-                                            console.log(`items file[${i}].name = ${file?.name}`);
-                                        }
-                                    });
-                                } else {
-                                    [...e.dataTransfer.files].forEach((file, i) => {
-                                        console.log(`… file[${i}].name = ${file.name}`);
-                                    });
-                                }
-                            }}
-                            className={`${
-                                fileEnter ? "border-4" : "border-2"
-                            } mx-auto  bg-white flex flex-col w-full max-w-xs h-72 border-dashed items-center justify-center`}
-                        >
-                            <label
-                                htmlFor="file"
-                                className="h-full flex flex-col justify-center text-center"
-                            >
-                                Click to upload or drag and drop image
-                            </label>
-                            <input
-                                id="file"
-                                type="file"
-                                className="hidden"
-                                onChange={(e) => {
-                                    console.log(e.target.files);
-                                    let files = e.target.files;
-                                    if (files && files[0]) {
-                                        let blobUrl = URL.createObjectURL(files[0]);
-                                        setFile(blobUrl);
-                                    }
-                                }}
-                            />
-                        </div>
-                    ) : (
-                        <div className="flex flex-col items-center w-full">
-                            <object
-                                className="rounded-md w-full max-w-xs h-72"
-                                data={file}
-                                type="image/png" //need to be updated based on type of file
-                            />
-                            <Button
-                                onClick={() => setFile("")}
-                                className="px-4 mt-2 py-2 rounded"
-                            >
-                                Reset
-                            </Button>
-                        </div>
-                    )}
-                </div>
             </div>
             </div>
                 <div className="grid gap-2">
@@ -174,13 +122,7 @@ export default function AddPost() {
                 </div>
                 <div className="">
                     <Label htmlFor="name">Description</Label>
-                    <Input
-                        id="description"
-                        type="text"
-                        placeholder="What are you thinking about?"
-                        required
-                        {...form.register("description")}
-                    />
+                    <Textarea placeholder="What are you thinking about?" id="description" required  {...form.register("description")}/>
                     {form.formState.errors.description && (
                         <p className="text-red-500 text-sm">
                             {form.formState.errors.description.message}
