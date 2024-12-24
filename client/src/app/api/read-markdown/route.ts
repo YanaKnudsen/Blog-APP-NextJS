@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import { NextApiRequest, NextApiResponse } from "next";
 import {NextResponse} from "next/server";
+import matter from "gray-matter";
 
 export async function GET(req: Request,res:Response) {
     const filePath = path.join(process.cwd(), "/src/markdowns/", "post1.md");
