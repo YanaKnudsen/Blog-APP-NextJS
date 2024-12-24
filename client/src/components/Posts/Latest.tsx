@@ -29,7 +29,7 @@ export default function Latest() {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const router=useRouter();
     useEffect(() => {
-     getData(currentPage);
+        getData(currentPage);
     }, []);
 
     async function getData(page:number){
@@ -51,9 +51,9 @@ export default function Latest() {
 
     const handlePageChange = (page: number) => {
         console.log("current page",currentPage)
-            setCurrentPage(page);
-            getData(page);
-            console.log("new page",page)
+        setCurrentPage(page);
+        getData(page);
+        console.log("new page",page)
 
     };
 
@@ -72,10 +72,7 @@ export default function Latest() {
                         </CardHeader>
                         <CardFooter className="px-4 py-2 text-sm flex-col items-start">
                             <Button onClick={()=>{
-                                router.push({
-                                    pathname: `/posts/${post.slug}`,
-                                    query: { post: post},
-                                });
+                                router.push(`/posts/${post.slug}`);
                             }}>read</Button>
                             <p className="mt-2">{post.createdAt.split("T")[0]}</p>
                         </CardFooter>
