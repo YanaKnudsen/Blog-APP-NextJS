@@ -6,6 +6,7 @@ import Footer from "@/components/Footer/Footer";
 import ScreenSizeIndicator from "@/components/ScreenSizeIndicator";
 import {ThemeProvider} from "../providers/theme-provider";
 import AuthProvider from "@/providers/auth-provider";
+import {SessionProvider} from "next-auth/react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -45,6 +46,7 @@ export default function RootLayout({
                     <Footer/>
             </ThemeProvider>
         </AuthProvider>
+
         </body>
         </html>
   );

@@ -13,6 +13,8 @@ import { Label } from "@/components/ui/label"
 import {z} from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {useForm} from "react-hook-form";
+import {FormEvent} from "react";
+import {useRouter} from "next/navigation";
 
 
 const FormSchema = z.object({
@@ -32,8 +34,8 @@ const FormSchema = z.object({
             message: "Password must contain at least one special character",
         }),
 });
-type FormSchemaType = z.infer<typeof FormSchema>;
-//add confirm password
+
+//add confirm password maybe
 export function SignupForm({
                               className,
                               ...props
@@ -44,10 +46,29 @@ export function SignupForm({
         resolver: zodResolver(FormSchema),
     });
 
-    const onSubmit = (values:z.infer<typeof FormSchema>) => {
-        console.log("Form Data:", values);
-        // Add signup logic here
-    };
+   const router=useRouter();
+
+    async function handleSignup(values:z.infer<typeof FormSchema>){
+      const res=await fetch("/api/user",{
+          method:"POST",
+          headers:{
+              'Content-Type':'application/json'
+          },
+          body:JSON.stringify({
+              name:values.name,
+              email:values.email,
+              password:values.password
+          })
+        })
+        if (res.ok) {
+            router.push("/login")
+        }else{
+            console.error("Registration failed")
+            //show error message here from res
+        }
+
+
+    }
 
     return (
         <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -57,7 +78,7 @@ export function SignupForm({
 
                 </CardHeader>
                 <CardContent>
-                    <form onSubmit={form.handleSubmit(onSubmit)}>
+                    <form onSubmit={form.handleSubmit(handleSignup)}>
                         <div className="grid gap-6">
                             <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
                             </div>

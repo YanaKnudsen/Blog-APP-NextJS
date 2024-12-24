@@ -12,11 +12,45 @@ import { Label } from "@/components/ui/label"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub,faGoogle } from '@fortawesome/free-brands-svg-icons'
 import {signIn} from "next-auth/react";
+import {z} from "zod";
+import {useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {useRouter} from "next/navigation";
 
+const LoginSchema = z.object({
+    email: z
+        .string().min(1,"Email is required")
+        .email({ message: "Please enter a valid email address" }),
+    password: z.string().min(1, { message: "Password is required" })
+
+});
 export function LoginForm({
                               className,
                               ...props
                           }: React.ComponentPropsWithoutRef<"div">) {
+
+    const form= useForm<typeof LoginSchema>({
+        resolver: zodResolver(LoginSchema),
+    });
+    const router=useRouter();
+
+    async function handleLogin(values:z.infer<typeof LoginSchema>){
+        console.log("handling login",values);
+        const data=await signIn("credentials",{
+            email:values.email,
+            password:values.password,
+            redirect: false,
+        });
+        console.log(data);
+        if (data?.error){
+            console.log(data?.error);
+        }else{
+            console.log("logindata",data)
+            router.push("/Profile");
+        }
+
+
+    }
     return (
         <div className={cn("flex flex-col gap-6", className)} {...props}>
             <Card>
@@ -27,7 +61,7 @@ export function LoginForm({
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form>
+                    <form  onSubmit={form.handleSubmit(handleLogin)}>
                         <div className="grid gap-6">
                             <div className="flex flex-col gap-4">
                                 <Button variant="outline" className="w-full" onClick={()=>{signIn("google")}}>
@@ -52,7 +86,14 @@ export function LoginForm({
                                         type="email"
                                         placeholder="m@example.com"
                                         required
+                                        {...form.register("email")}
                                     />
+                                    {form.formState.errors.email && (
+                                        <p className="text-red-500 text-sm">
+                                            {form.formState.errors.email.message}
+                                        </p>
+                                    )}
+
                                 </div>
                                 <div className="grid gap-2">
                                     <div className="flex items-center">
@@ -64,7 +105,13 @@ export function LoginForm({
                                             Forgot your password?
                                         </a>
                                     </div>
-                                    <Input id="password" type="password" required />
+                                    <Input id="password" type="password" required  {...form.register("password")}/>
+                                    {form.formState.errors.password && (
+                                        <p className="text-red-500 text-sm">
+                                            {form.formState.errors.password.message}
+                                        </p>
+                                    )}
+
                                 </div>
                                 <Button type="submit" className="w-full">
                                     Login
