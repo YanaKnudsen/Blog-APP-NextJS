@@ -46,7 +46,7 @@ export function LoginForm({
             console.log(data?.error);
         }else{
             console.log("logindata",data)
-            router.push("/Profile");
+            router.push("/profile");
         }
 
 
