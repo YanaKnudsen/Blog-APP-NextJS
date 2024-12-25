@@ -5,10 +5,12 @@ import PostsPagination from "@/components/Pagination";
 
 
 
-export default async function Posts({ currentPage }) {
+export default async function Posts({ currentPage,label,id}) {
     const take="4";
+
+
     //fetch all posts
-    const postsData:{posts:Post[],count:number}= await fetchPosts(currentPage,take);
+    const postsData:{posts:Post[],count:number}= await fetchPosts(currentPage,take,id);
     console.log("postsData",postsData);
 
     const hasPrev = take * (currentPage - 1) > 0;
@@ -17,7 +19,7 @@ export default async function Posts({ currentPage }) {
     return (
         <div className="flex flex-col h-auto w-full items-center ">
             <h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0 mb-5">
-                Discover our posts
+                {label}
             </h2>
             {postsData.posts.map((post)=>(
                 <div key={post.id} className="w-full flex mb-2 items-center justify-center">

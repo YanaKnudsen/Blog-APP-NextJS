@@ -12,29 +12,29 @@ export function TypographyH2({children}) {
         </h2>
     )
 }
-export function TypographyH3({text}) {
+export function TypographyH3({children}) {
     return (
         <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
-            {text}
+            {children}
         </h3>
     )
 }
-export function TypographyH4({text}) {
+export function TypographyH4({children}) {
     return (
         <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
-            v
+            {children}
         </h4>
     )
 }
-export function TypographyP({text}) {
+export function TypographyP({children}) {
     return (
         <p className="leading-7 [&:not(:first-child)]:mt-6">
-            {text}
+            {children}
         </p>
     )
 }
-export function TypographyMuted({text}) {
+export function TypographyMuted({children}) {
     return (
-        <p className="text-sm text-muted-foreground">{text}</p>
+        <p className="text-sm text-muted-foreground">{children}</p>
     )
 }

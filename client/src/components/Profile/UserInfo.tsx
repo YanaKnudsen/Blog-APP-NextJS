@@ -2,7 +2,7 @@
 import {useSession} from "next-auth/react";
 import {TypographyH2} from "@/components/ui/typography/typography";
 import {useEffect} from "react";
-import {useUserStore,useBearStore,useCounterStore} from '../../store/zustand';
+import {useUserStore} from '../../store/zustand';
 
 export default function UserInfo() {
     const {data:session,status}=useSession()
@@ -17,7 +17,7 @@ export default function UserInfo() {
 
 
     return (
-        <div className="w-full flex flex-col items-center">
+        <div className="w-full flex flex-col items-center mb-10 mt-10">
             <TypographyH2>Welcome back, {name}</TypographyH2>
         </div>
     );

@@ -1,7 +1,8 @@
 "use client"
 import {useState} from "react";
+import {TypographyH1} from "@/components/ui/typography/typography";
 
-export default function PostInfo({post,markdown}) {
+export default function PostInfo({post,markdown,title = ""}) {
     const [markdownHtml, setMarkdownHtml] = useState<string | null>(null);
 
 
@@ -11,6 +12,8 @@ export default function PostInfo({post,markdown}) {
                 <div>{post?.user.name}</div>
                 <p className="mt-2">{post.createdAt.split("T")[0]}</p>
             </div>
+
+            {title && <TypographyH1>{title}</TypographyH1>}
 
             <div className="prose" dangerouslySetInnerHTML={{ __html:  markdown|| ""  }}  />
         </div>

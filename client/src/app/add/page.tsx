@@ -14,6 +14,7 @@ import matter from "gray-matter";
 import { Textarea } from "@/components/ui/textarea"
 import { promises as fs } from 'fs';
 import {useDraftStore, useUserStore} from "@/store/zustand";
+import {markdownToHTML} from "@/helpers";
 
 const schema = z.object({
     title: z
@@ -34,11 +35,23 @@ export default function AddPost() {
     const [isMatter, setIsMatter] = useState<boolean>(false);
     const [markdownHtml, setMarkdownHtml] = useState<string | null>(null);
     const [isPreview, setIsPreview ]= useState<boolean>(false);
-   // const [isDraft, setIsDraft ]= useState<boolean>(true);
+
+    const title = useDraftStore((state) => state.title);
+    const description = useDraftStore((state) => state.description);
+
+
+    useEffect(() => {
+        if(title){
+            setValue("title",title,{ shouldValidate: true });
+            setValue("description",description,{ shouldValidate: true })
+            useDraftStore.setState({title:""})
+            useDraftStore.setState({description:""})
+        }
+    }, [title,description]);
 
 
     const { register, setValue,getValues,handleSubmit ,setError,reset,
-        formState: { errors }, } = useForm<Schema>({
+        formState: { errors,isValid }, } = useForm<Schema>({ mode: 'onChange' ,
         resolver: zodResolver(schema),
     })
 
@@ -76,7 +89,9 @@ export default function AddPost() {
     const route=useRouter();
 
 
-    async function submitPost(values:z.infer<typeof schema>){
+    async function submitPost(values:z.infer<typeof schema>,isDraft=false){
+        console.log("values",values)
+        console.log("draft",id)
         const res=await fetch("/api/post/create",{
             method:"POST",
             headers:{
@@ -86,7 +101,7 @@ export default function AddPost() {
                 title:values.title,
                 description:values.description,
                 slug:slugify(values.title),
-                draft: isDraft,
+                published: isDraft,
                 userId:id,
             })
         })
@@ -107,26 +122,20 @@ export default function AddPost() {
 
 
     async function readFile(e){
-
         const uploadedFile=e.target.files?.[0];
         const reader = new FileReader()
         reader.onload = async (e) => {
             const text = (e.target.result)
             setValue("description", text, { shouldValidate: true });
-            const matterResult = matter(text);
-            if(matterResult.data.title){
+            const res=await markdownToHTML(text);
+            if(res.matterTitle){
+                const title=res.matterTitle;
+                console.log(typeof title)
+                setValue("title",title, { shouldValidate: true });
                 setIsMatter(true);
-                const matterTitle  = matterResult.data.title;
-                setValue("title",matterTitle, { shouldValidate: true });
-                // Convert Markdown to HTML
-                const processedContent = await remark().use(html).process(matterResult.content);
-                setMarkdownHtml(processedContent.toString());
-            }else{
-                // Convert Markdown to HTML
-                setIsMatter(false);
-                const processedContent = await remark().use(html).process(text);
-                setMarkdownHtml(processedContent.toString());
             }
+            console.log(title);
+            setMarkdownHtml(res.mark);
 
         };
        reader.readAsText(e.target.files[0]);
@@ -134,40 +143,19 @@ export default function AddPost() {
 
     }
 
-
-
-
     const hiddenFileInput = useRef(null);
     const handleClick = event => {
         hiddenFileInput.current.click();
     };
 
-    const isDraft = useDraftStore((state) => state.isDraft);
 
-    useEffect(() => {
-        console.log("use eff unit")
-
-        // submitPost();
-    }, [isDraft]);
-    useEffect(() => {
-        console.log("is draft use effe",isDraft)
-
-           // submitPost();
-    }, [isDraft]);
-
-    function saveDraft(data: z.infer<typeof schema>){
-        console.log("is draft",isDraft)
-        setIsDraft(false);
-        console.log("value",data)
-        submitPost(data);
-      //  useDraftStore.setState({isDraft:false});
+    function onPublish(e: React.MouseEvent<HTMLButtonElement>){
+            console.log(e.currentTarget.name);
+            const values=getValues();
+            console.log("values",values)
+            submitPost(values,true);
 
     }
-    function onSubmit(){
-        //console.log("is draft",draft)
-        // submitPost(false);
-    }
-
 
 
 
@@ -230,8 +218,8 @@ export default function AddPost() {
 
                 </div>
                 <div className="flex flex-row justify-end gap-2">
-                    <Button  type="button" onClick={handleSubmit(saveDraft)}>Save draft</Button>
-                    <Button  type="submit">Submit</Button>
+                    <Button  type="submit" name="draft" >Save draft</Button>
+                    <Button  type="button" name="publish" disabled={!isValid} onClick={onPublish}>Publish</Button>
 
             </div>
             </form>

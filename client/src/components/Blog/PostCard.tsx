@@ -3,23 +3,23 @@ import {Post} from "@/@types/post";
 import {Card, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
 import {Button} from "@/components/ui/button";
 import {useRouter} from "next/navigation";
+import {useEffect, useState} from "react";
+import {useDraftStore, useUserStore} from '../../store/zustand';
 
 
 export default function PostCard({post}) {
     const router=useRouter();
+    const [edit,setEdit]=useState<boolean>(false);
+    const title = useDraftStore((state) => state.title);
+    const description = useDraftStore((state) => state.description);
 
-
-
-    /*
-
-    const handlePageChange = (page: number) => {
-        console.log("current page",currentPage)
-        setCurrentPage(page);
-        getData(page);
-        console.log("new page",page)
-
-    };
-*/
+    useEffect(() => {
+        if(edit){
+            useDraftStore.setState({title:post.title})
+            useDraftStore.setState({description:post.description})
+            router.push(`/add`);
+        }
+    }, [edit]);
 
     return (
             <Card key={post.slug} className="w-full max-w-xl rounded-lg shadow-lg overflow-hidden">
@@ -28,38 +28,19 @@ export default function PostCard({post}) {
                     <CardTitle className="text-lg font-semibold">{post.title}</CardTitle>
                 </CardHeader>
                 <CardFooter className="px-4 py-2 text-sm flex-col items-start">
-                    <Button onClick={()=>{
-                        router.push(`/posts/${post.slug}`);
-                    }}>read</Button>
                     <div className="flex flex-row gap-2">
+                    {post.published ?(<Button onClick={()=>{
+                        router.push(`/posts/${post.slug}`);
+                    }}>read</Button>):(<Button onClick={() => {
+                        setEdit(true);
+                    }}>edit</Button>)}
+                    </div>
+                    <div className="flex flex-row gap-2 items-center justify-center">
                         <p className="mt-2">{post.user.name}</p>
                         <p className="mt-2">{post.createdAt.split("T")[0]}</p>
+                        {!post.published && <p className="mt-2">draft</p>}
                     </div>
                 </CardFooter>
-                {/*
-
-            <Pagination>
-                <PaginationContent>
-                    <PaginationItem>
-                        <PaginationPrevious href="#" onClick={() => handlePageChange(currentPage - 1)} tabIndex={currentPage <= 1 ? -1 : undefined}
-                                            className={
-                                                currentPage <= 1 ? "pointer-events-none opacity-50" : undefined
-                                            }/>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationLink href="#">{currentPage}</PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationEllipsis />
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationNext href="#" onClick={() => handlePageChange(currentPage + 1)} tabIndex={currentPage <= 1 ? -1 : undefined}
-                                        className={
-                                            currentPage >= pagesCount ? "pointer-events-none opacity-50" : undefined
-                                        }/>
-                    </PaginationItem>
-                </PaginationContent>
-            </Pagination>        */}
             </Card>
 
 

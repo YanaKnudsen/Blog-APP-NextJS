@@ -5,11 +5,12 @@ import slugify from "slugify";
 //create new post
 export async function GET(req: Request) {
     const {searchParams}=new URL(req.url);
+    console.log("searchParams",searchParams)
     const page:string|null=searchParams.get("page")
     const take:string|null=searchParams.get("take")
     const userId:string|null=searchParams.get("userId")
 
-    console.log("out id", userId)
+    console.log("userId", page, take,userId)
 
     if( userId){
         console.log("selecting specific user with id", userId);
@@ -21,7 +22,7 @@ export async function GET(req: Request) {
     const query={
         take: takeNumber,
         skip: takeNumber * (pageNumber - 1),
-        ...(userId ? { where: { userId: userId } } : {}),
+        ...(userId ? { where: { userId: userId } } : {where: { published: true }}),
         include: { user: true },
         orderBy: { createdAt: 'desc' },
 
