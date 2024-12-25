@@ -59,7 +59,14 @@ export default function AddPost() {
     const handleMarkdownChange = async (event: React.ChangeEvent<HTMLTextAreaElement >) => {
         const input = event.target.value;
         setValue("description",input,{ shouldValidate: true })
-        const matterResult = matter(input);
+        const { title: matterTitle, html: markdown } = await markdownToHTML(input);
+        if(matterTitle){
+            setValue("title",matterTitle, { shouldValidate: true });
+            setIsMatter(true);
+        }
+        setMarkdownHtml(markdown);
+
+        /*const matterResult = matter(input);
         if(matterResult.data.title){
             setIsMatter(true);
             const matterTitle  = matterResult.data.title;
@@ -73,7 +80,7 @@ export default function AddPost() {
             setIsMatter(false);
             const processedContent = await remark().use(html).process(input);
             setMarkdownHtml(processedContent.toString());
-        }
+        }*/
 
 
 
@@ -89,9 +96,8 @@ export default function AddPost() {
     const route=useRouter();
 
 
-    async function submitPost(values:z.infer<typeof schema>,isDraft=false){
-        console.log("values",values)
-        console.log("draft",id)
+    async function submitPost(values:z.infer<typeof schema>,isDraft:boolean){
+
         const res=await fetch("/api/post/create",{
             method:"POST",
             headers:{
@@ -117,29 +123,21 @@ export default function AddPost() {
           }
 
     }
-
-
-
-
     async function readFile(e){
         const uploadedFile=e.target.files?.[0];
         const reader = new FileReader()
         reader.onload = async (e) => {
             const text = (e.target.result)
             setValue("description", text, { shouldValidate: true });
-            const res=await markdownToHTML(text);
-            if(res.matterTitle){
-                const title=res.matterTitle;
-                console.log(typeof title)
-                setValue("title",title, { shouldValidate: true });
+            const { title: matterTitle, html: markdown } = await markdownToHTML(text);
+            if(matterTitle){
+                setValue("title",matterTitle, { shouldValidate: true });
                 setIsMatter(true);
             }
-            console.log(title);
-            setMarkdownHtml(res.mark);
+            setMarkdownHtml(markdown);
 
         };
        reader.readAsText(e.target.files[0]);
-
 
     }
 
@@ -149,12 +147,16 @@ export default function AddPost() {
     };
 
 
-    function onPublish(e: React.MouseEvent<HTMLButtonElement>){
-            console.log(e.currentTarget.name);
+    function onPublish(){
             const values=getValues();
             console.log("values",values)
             submitPost(values,true);
+    }
 
+    function onDraft(){
+        const values=getValues();
+        console.log("values",values)
+        submitPost(values,false);
     }
 
 
@@ -218,7 +220,7 @@ export default function AddPost() {
 
                 </div>
                 <div className="flex flex-row justify-end gap-2">
-                    <Button  type="submit" name="draft" >Save draft</Button>
+                    <Button  type="button" name="draft" disabled={!isValid} onClick={onDraft}>Save Draft</Button>
                     <Button  type="button" name="publish" disabled={!isValid} onClick={onPublish}>Publish</Button>
 
             </div>

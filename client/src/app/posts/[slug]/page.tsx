@@ -15,9 +15,6 @@ export default async function PostPage({ params }: { params: { slug: string } })
     console.log("slug",slug)
     const postData= await fetchData(slug);
     const { title: matterTitle, html: markdown } = await markdownToHTML(postData.description);
-
-    // Use matterTitle if available, otherwise fall back to postData.title
-
     const title = matterTitle? "" : postData.title;
     console.log(title)
 
