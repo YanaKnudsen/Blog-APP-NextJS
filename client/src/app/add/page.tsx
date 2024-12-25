@@ -7,12 +7,13 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {Label} from "@/components/ui/label";
 import slugify from "slugify";
 import {useRouter} from "next/navigation";
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import { remark } from 'remark';
 import html from 'remark-html';
 import matter from "gray-matter";
 import { Textarea } from "@/components/ui/textarea"
 import { promises as fs } from 'fs';
+import {useDraftStore, useUserStore} from "@/store/zustand";
 
 const schema = z.object({
     title: z
@@ -33,8 +34,10 @@ export default function AddPost() {
     const [isMatter, setIsMatter] = useState<boolean>(false);
     const [markdownHtml, setMarkdownHtml] = useState<string | null>(null);
     const [isPreview, setIsPreview ]= useState<boolean>(false);
+   // const [isDraft, setIsDraft ]= useState<boolean>(true);
 
-    const { register, setValue,getValues,handleSubmit ,setError,
+
+    const { register, setValue,getValues,handleSubmit ,setError,reset,
         formState: { errors }, } = useForm<Schema>({
         resolver: zodResolver(schema),
     })
@@ -69,11 +72,11 @@ export default function AddPost() {
     }
 
 
-
+    const id = useUserStore((state) => state.id);
+    const route=useRouter();
 
 
     async function submitPost(values:z.infer<typeof schema>){
-        console.log("heer",values.description);
         const res=await fetch("/api/post/create",{
             method:"POST",
             headers:{
@@ -83,10 +86,14 @@ export default function AddPost() {
                 title:values.title,
                 description:values.description,
                 slug:slugify(values.title),
+                draft: isDraft,
+                userId:id,
             })
         })
         if (res.ok) {
             console.log(res);
+            reset();
+            route.push("/profile");
 
 
           }else{
@@ -125,9 +132,9 @@ export default function AddPost() {
        reader.readAsText(e.target.files[0]);
 
 
-
-
     }
+
+
 
 
     const hiddenFileInput = useRef(null);
@@ -135,9 +142,38 @@ export default function AddPost() {
         hiddenFileInput.current.click();
     };
 
+    const isDraft = useDraftStore((state) => state.isDraft);
+
+    useEffect(() => {
+        console.log("use eff unit")
+
+        // submitPost();
+    }, [isDraft]);
+    useEffect(() => {
+        console.log("is draft use effe",isDraft)
+
+           // submitPost();
+    }, [isDraft]);
+
+    function saveDraft(data: z.infer<typeof schema>){
+        console.log("is draft",isDraft)
+        setIsDraft(false);
+        console.log("value",data)
+        submitPost(data);
+      //  useDraftStore.setState({isDraft:false});
+
+    }
+    function onSubmit(){
+        //console.log("is draft",draft)
+        // submitPost(false);
+    }
+
+
+
+
     return (
         <div className="w-full min-w-screen flex p-8 pb-20 sm:p-20 ">
-            <form onSubmit={handleSubmit(submitPost)} className="flex flex-col gap-5 w-full">
+            <form onSubmit={handleSubmit(submitPost)}  className="flex flex-col gap-5 w-full">
             <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
                 Create new post
             </h1>
@@ -194,8 +230,8 @@ export default function AddPost() {
 
                 </div>
                 <div className="flex flex-row justify-end gap-2">
-                    <Button>Save draft</Button>
-                    <Button type="submit">Submit</Button>
+                    <Button  type="button" onClick={handleSubmit(saveDraft)}>Save draft</Button>
+                    <Button  type="submit">Submit</Button>
 
             </div>
             </form>

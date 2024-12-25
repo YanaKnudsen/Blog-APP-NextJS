@@ -1,8 +1,6 @@
 "use client"
 import {
     Card,
-    CardContent,
-    CardDescription,
     CardFooter,
     CardHeader,
     CardTitle,
@@ -22,11 +20,11 @@ import {Post} from "@/@types/post";
 import {router} from "next/client";
 import {useRouter} from "next/navigation";
 import {useSession} from "next-auth/react";
+import {useUserStore,useBearStore,useCounterStore} from '../../store/zustand';
 
 export default function ProfilePage() {
-    const {data:session}=useSession()
+    const {data:session,status}=useSession()
 
-    console.log("session",session);
     const [posts, setPosts] = useState<Post[]>([])
     const [postsCount, setPostsCount] = useState<number>(0)
     const [pagesCount, setPagesCount] = useState<number>(0)
@@ -34,21 +32,27 @@ export default function ProfilePage() {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const router=useRouter();
 
+    console.log("session",session);
 
+    const name = useUserStore((state) => state.name);
+    const id = useUserStore((state) => state.id);
+
+    const [isInitialLoad, setIsInitialLoad] = useState(true);
 
     useEffect(() => {
-        if (session?.user?.accessToken) {
-            // fetch user profile if access token is available
-            // fetchProfile(session.user.accessToken)
-        } else {
-            // Redirect to `/login` if no access token or no session
-
+        if (session) {
+            useUserStore.setState({id:session.user.id})
+            useUserStore.setState({name:session.user.name})
         }
         getData(currentPage);
     }, []);
 
+
+    if (status === "loading") return <p>Loading...</p>;
+
     async function getData(page:number){
-        const res=await fetch(`/api/posts?page=${page}&take=${postsPerPage}`,{
+        console.log("id inside get data",id)
+        const res=await fetch(`/api/posts?page=${page}&take=${postsPerPage}&userId=${id}`,{
             method:"GET",
             headers:{
                 'Content-Type':'application/json'
@@ -75,6 +79,8 @@ export default function ProfilePage() {
 
     return (
         <div className="flex flex-col h-auto w-full items-center">
+            <h1>Hello {name}</h1>
+            <h1>my id {id}</h1>
             <h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0 mb-5">
                 My posts
             </h2>
@@ -117,48 +123,6 @@ export default function ProfilePage() {
                 </PaginationContent>
             </Pagination>
 
-            <h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0 mb-5">
-                My Drafts
-            </h2>
-            <div className="min-w-full flex flex-col gap-5 items-center ">
-                {posts?.map((post)=>(
-                    <Card key={post.slug} className="w-full max-w-xl rounded-lg shadow-lg overflow-hidden">
-
-                        <CardHeader className="p-4">
-                            <CardTitle className="text-lg font-semibold">{post.title}</CardTitle>
-                        </CardHeader>
-                        <CardFooter className="px-4 py-2 text-sm flex-col items-start">
-                            <Button onClick={()=>{
-                                router.push(`/posts/${post.slug}`);
-                            }}>read</Button>
-                            <p className="mt-2">{post.createdAt.split("T")[0]}</p>
-                        </CardFooter>
-                    </Card>
-                ))}
-            </div>
-            <Pagination>
-                <PaginationContent>
-                    <PaginationItem>
-                        <PaginationPrevious href="#" onClick={() => handlePageChange(currentPage - 1)} tabIndex={currentPage <= 1 ? -1 : undefined}
-                                            className={
-                                                currentPage <= 1 ? "pointer-events-none opacity-50" : undefined
-                                            }/>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationLink href="#">{currentPage}</PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationEllipsis />
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationNext href="#" onClick={() => handlePageChange(currentPage + 1)} tabIndex={currentPage <= 1 ? -1 : undefined}
-                                        className={
-                                            currentPage >= pagesCount ? "pointer-events-none opacity-50" : undefined
-                                        }/>
-                    </PaginationItem>
-                </PaginationContent>
-            </Pagination>
-            {/*for PaginationNext see when disable maybe when no post rreturne*/}
 
         </div>
     );

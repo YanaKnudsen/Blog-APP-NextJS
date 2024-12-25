@@ -1,13 +1,14 @@
 import {NextResponse} from "next/server";
 import {prisma} from "@/utils/db";
+import slugify from "slugify";
 
-//show all posts
-export async function GET(req: Request) {
+//create new post
+export async function POST(req: Request) {
     try {
         const body=await req.json();
         console.log("data",body)
-        const newPost=await prisma.post.create({
-            data:{...body,userId:"cm51dlpyj0000136yxqu4624p"},
+        const newPost=await prisma.comment.create({
+            data: body,
         });
         console.log(newPost);
 

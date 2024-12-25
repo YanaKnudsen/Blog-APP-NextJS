@@ -8,7 +8,7 @@ export async function POST(req: Request) {
         const body=await req.json();
         console.log("data",body)
         const newPost=await prisma.post.create({
-            data:{...body,userId:"cm51dlpyj0000136yxqu4624p"},
+            data: body,
         });
         console.log(newPost);
 

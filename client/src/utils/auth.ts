@@ -31,23 +31,17 @@ export const authOptions ={
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials) {
-                console.log("credentials",credentials?.email,credentials?.password)
                 if(!credentials?.email || !credentials?.password){
                     return null;
                 }
-                //find user in the database
+                //find user in the database better fetc api
                 const user=await prisma.user.findUnique({
                     where:{email:credentials?.email}
                 });
-                console.log("auth user",user)
                 if(user){
                     const passwordOk=await compare(credentials.password,user.password);
                     if (passwordOk){
-                        return {
-                            id:`${user.id}`,
-                            name:user.name,
-                            email:user.email
-                        }
+                        return user
                     }else{
                         return null;
                     }
@@ -63,5 +57,18 @@ export const authOptions ={
         signIn: "/login",
     },
     secret: process.env.AUTH_SECRET,
+    callbacks: {
+        async session({ session, token }) {
+            // Attach token or user data to session if needed
+            session.user.id = token?.id;
+            return session;
+        },
+        async jwt({ token, user }) {
+            if (user) {
+                token.id = user.id;
+            }
+            return token;
+        },
+    },
 
 }

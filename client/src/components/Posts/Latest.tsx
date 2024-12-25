@@ -74,7 +74,10 @@ export default function Latest() {
                             <Button onClick={()=>{
                                 router.push(`/posts/${post.slug}`);
                             }}>read</Button>
+                            <div className="flex flex-row gap-2">
+                            <p className="mt-2">{post.user.name}</p>
                             <p className="mt-2">{post.createdAt.split("T")[0]}</p>
+                            </div>
                         </CardFooter>
                     </Card>
                 ))}

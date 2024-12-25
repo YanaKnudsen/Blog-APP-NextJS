@@ -6,7 +6,10 @@ import Footer from "@/components/Footer/Footer";
 import ScreenSizeIndicator from "@/components/ScreenSizeIndicator";
 import {ThemeProvider} from "../providers/theme-provider";
 import AuthProvider from "@/providers/auth-provider";
+import { Provider as NextAuthProvider } from "next-auth/client";
 import {SessionProvider} from "next-auth/react";
+import {session} from "next-auth/core/routes";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,16 +27,19 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-  children,
+  children,session
 }: Readonly<{
   children: React.ReactNode;
+  session:any;
 }>) {
+
     return (
         <html lang="en">
         <body
             className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
         >
-        <AuthProvider>
+
+        <AuthProvider session={session}>
             <ThemeProvider
                 attribute="class"
                 defaultTheme="system"
@@ -43,9 +49,9 @@ export default function RootLayout({
                     <Navbar/>
                     {children}
                     <ScreenSizeIndicator/>
-                    <Footer/>
             </ThemeProvider>
         </AuthProvider>
+
 
         </body>
         </html>
