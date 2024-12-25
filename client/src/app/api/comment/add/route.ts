@@ -1,6 +1,5 @@
 import {NextResponse} from "next/server";
 import {prisma} from "@/utils/db";
-import slugify from "slugify";
 
 //create new post
 export async function POST(req: Request) {

@@ -33,7 +33,7 @@ export const useDraftStore = create((set) => ({
     setIsDraft: (draft) => set({ isDraft: draft}),
 
 }))
-
+//dont need persist just normal
 export const useUserStore = create(
     persist(
         (set, get) => ({
@@ -45,5 +45,10 @@ export const useUserStore = create(
         },
     ),
 )
+
+export const useMainBlogStore = create((set) => ({
+    currentPage: 1,
+    items_per_page:4,
+}))
 
 

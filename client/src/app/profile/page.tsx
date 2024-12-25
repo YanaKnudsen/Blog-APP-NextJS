@@ -1,4 +1,4 @@
-"use client"
+
 import {
     Card,
     CardFooter,
@@ -14,15 +14,16 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination"
-import {useEffect, useState} from "react"
 import {Button} from "@/components/ui/button";
 import {Post} from "@/@types/post";
 import {router} from "next/client";
-import {useRouter} from "next/navigation";
-import {useSession} from "next-auth/react";
 import {useUserStore,useBearStore,useCounterStore} from '../../store/zustand';
+import {TypographyH2} from "@/components/ui/typography/typography";
+import UserInfo from "@/components/Profile/UserInfo";
 
-export default function ProfilePage() {
+export default function ProfilePage({ searchParams }) {
+    //const {data:session,status}=useSession()
+    /*
     const {data:session,status}=useSession()
 
     const [posts, setPosts] = useState<Post[]>([])
@@ -74,11 +75,14 @@ export default function ProfilePage() {
         getData(page);
         console.log("new page",page)
 
-    };
+    };*/
 
 
     return (
-        <div className="flex flex-col h-auto w-full items-center">
+        <div className="flex flex-col h-auto w-full items-center p-5">
+            <UserInfo/>
+
+            {/*
             <h1>Hello {name}</h1>
             <h1>my id {id}</h1>
             <h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0 mb-5">
@@ -121,7 +125,7 @@ export default function ProfilePage() {
                                         }/>
                     </PaginationItem>
                 </PaginationContent>
-            </Pagination>
+            </Pagination>*/}
 
 
         </div>
