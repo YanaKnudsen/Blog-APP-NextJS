@@ -3,7 +3,7 @@ import {Pagination,PaginationContent,PaginationItem,PaginationPrevious,Paginatio
 import { useRouter } from "next/navigation";
 import {useEffect, useState} from "react";
 
-export default function CommentsPagination({currentPage,setCurrentPage,take,count}:{currentPage:number,setCurrentPage:Function, take:number,count:number}) {
+export default function PaginationComponent({currentPage,setCurrentPage,take,count}:{currentPage:number,setCurrentPage:Function, take:number,count:number}) {
     const router=useRouter();
 
 

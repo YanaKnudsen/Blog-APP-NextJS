@@ -5,7 +5,7 @@ import CommentCard from "@/components/Comments/CommentCard";
 import {QueryClient,HydrationBoundary,dehydrate,useQuery} from "@tanstack/react-query";
 import {useEffect, useState} from "react";
 
-import CommentsPagination from "@/components/Pagination/CommentsPagination";
+import PaginationComponent from "@/components/Pagination/PaginationComponent";
 import {Post} from "@/@types/post";
 
 
@@ -36,7 +36,7 @@ export default function Comments({post,page}:{post:Post}) {
             {data?.comments.map((comment:Comment) => (
                 <div key={comment.id}><CommentCard comment={comment}/></div>
             ))}
-            <CommentsPagination currentPage={currentPage} setCurrentPage={setCurrentPage} take={take} count={data?.count} />
+            <PaginationComponent currentPage={currentPage} setCurrentPage={setCurrentPage} take={take} count={data?.count} />
 
         </div>
 

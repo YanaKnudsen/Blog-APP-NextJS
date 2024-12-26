@@ -15,6 +15,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { promises as fs } from 'fs';
 import {useDraftStore, useUserStore} from "@/store/zustand";
 import {markdownToHTML} from "@/helpers";
+import Preview from "@/components/Blog/Preview";
 
 const schema = z.object({
     title: z
@@ -66,21 +67,7 @@ export default function AddPost() {
         }
         setMarkdownHtml(markdown);
 
-        /*const matterResult = matter(input);
-        if(matterResult.data.title){
-            setIsMatter(true);
-            const matterTitle  = matterResult.data.title;
-            setValue("title",matterTitle, { shouldValidate: true })
-            // Convert Markdown to HTML
-            const processedContent = await remark().use(html).process(matterResult.content);
-            const mark=processedContent.toString();
-            setMarkdownHtml(processedContent.toString());
-        }else{
-            // Convert Markdown to HTML
-            setIsMatter(false);
-            const processedContent = await remark().use(html).process(input);
-            setMarkdownHtml(processedContent.toString());
-        }*/
+
 
 
 
@@ -183,11 +170,8 @@ export default function AddPost() {
                     </div>
                     </div>
                     <div className="  w-full overflow-auto p-1">
-                        {isPreview ?(<div className="">
-                                {!isMatter && ( <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-                                    {getValues("title")}
-                                </h1>)}
-                                {markdownHtml &&  <div className="prose mx-auto" dangerouslySetInnerHTML={{ __html:  markdownHtml|| ""  }}  />}</div>):
+                        {isPreview ?(
+                                <Preview isMatter={isMatter} markdownHtml={markdownHtml} getValues={getValues}/>):
                             (<div className="flex flex-col gap-2">
                                 <div className="grid gap-2">
                                     <Label htmlFor="name">Title</Label>

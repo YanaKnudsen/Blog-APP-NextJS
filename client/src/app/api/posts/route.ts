@@ -18,7 +18,7 @@ export async function GET(req: Request) {
 
 
     const pageNumber:number = page ? Number(page) : 1; // Default to 1 if null
-    const takeNumber:number  = take ? Number(take) : 10; // Default to 10 if null
+    const takeNumber:number  = take ? Number(take) : 4; // Default to 10 if null
     const query={
         take: takeNumber,
         skip: takeNumber * (pageNumber - 1),

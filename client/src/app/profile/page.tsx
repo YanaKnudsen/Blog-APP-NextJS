@@ -6,7 +6,7 @@ import {QueryClient,HydrationBoundary,dehydrate,useQuery} from "@tanstack/react-
 
 
 export default async function ProfilePage({searchParams}:{ searchParams: { page:string }}) {
-    const page = parseInt(searchParams.page) || 1;
+    const page = parseInt(searchParams.page??1) || 1;
     const session = await getServerSession(authOptions);
     const queryClient = new QueryClient()
     const dehydratedState = dehydrate(queryClient);
@@ -15,7 +15,7 @@ export default async function ProfilePage({searchParams}:{ searchParams: { page:
         <HydrationBoundary state={ dehydratedState}>
         <div className="flex flex-col h-auto w-full items-center p-5">
             <UserInfo/>
-            {session && <Posts currentPage={page} label={"My posts"} id={session?.user.id}/>}
+            {session && <Posts page={page} label={"My posts"} id={session?.user.id}/>}
 
 
         </div>

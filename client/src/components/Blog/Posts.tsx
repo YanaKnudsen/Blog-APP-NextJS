@@ -6,12 +6,12 @@ import PostsPagination from "@/components/Pagination";
 import {useQuery}  from "@tanstack/react-query";
 import fetchComments from "@/server/actions/fetch-comments";
 import {useEffect, useState} from "react";
-import CommentsPagination from "@/components/Pagination/CommentsPagination";
+import PaginationComponent from "@/components/Pagination/PaginationComponent";
 
 
 
 export default function Posts({ page,label,id}:{ page:number,label:string,id:string}) {
-    //fetch all posts
+    //fetch all posts on server component
     /*const postsData:{posts:Post[],count:number}= await fetchPosts(currentPage,take,id);
     console.log("postsData",postsData);*/
     const [currentPage,setCurrentPage]=useState<number>(page);
@@ -33,7 +33,7 @@ export default function Posts({ page,label,id}:{ page:number,label:string,id:str
                 <PostCard post={post}/>
                 </div>
             ))}
-            <CommentsPagination currentPage={currentPage} setCurrentPage={setCurrentPage} take={take} count={data?.count} />
+            <PaginationComponent currentPage={currentPage} setCurrentPage={setCurrentPage} take={take} count={data?.count} />
 
 
         </div>

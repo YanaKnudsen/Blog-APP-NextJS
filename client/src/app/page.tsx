@@ -1,6 +1,5 @@
 import Posts from "@/components/Blog/Posts";
-import {QueryClient,HydrationBoundary,dehydrate,useQuery} from "@tanstack/react-query";
-import fetchComments from "@/server/actions/fetch-comments";
+import {QueryClient,HydrationBoundary,dehydrate} from "@tanstack/react-query";
 import fetchPosts from "@/server/actions/fetch-posts";
 
 
@@ -8,10 +7,9 @@ import fetchPosts from "@/server/actions/fetch-posts";
 export default async function Home({ searchParams }:{ searchParams: { page:string } }) {
     const queryClient = new QueryClient()
     const page = parseInt(searchParams.page??"1") || 1;
-    console.log("page",page);
     await queryClient.prefetchQuery({
-        queryKey:["posts",2,4],
-        queryFn:fetchPosts(2,4),
+        queryKey:["posts",page],
+        queryFn:fetchPosts(page),
     })
     const dehydratedState = dehydrate(queryClient)
 
