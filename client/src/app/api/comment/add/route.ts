@@ -1,7 +1,7 @@
 import {NextResponse} from "next/server";
 import {prisma} from "@/utils/db";
 
-//create new post
+//edit new post
 export async function POST(req: Request) {
     try {
         const body=await req.json();

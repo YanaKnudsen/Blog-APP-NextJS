@@ -17,6 +17,7 @@ export default function PostCard({post}) {
         if(edit){
             useDraftStore.setState({title:post.title})
             useDraftStore.setState({description:post.description})
+            useDraftStore.setState({id:post.id})
             router.push(`/add`);
         }
     }, [edit]);

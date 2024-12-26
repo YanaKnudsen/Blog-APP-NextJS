@@ -3,7 +3,7 @@ import {prisma} from "@/utils/db";
 import slugify from "slugify";
 import {revalidatePath} from "next/cache";
 
-//create new post
+//edit new post
 export async function GET(req: Request) {
     const {searchParams}=new URL(req.url);
     const page:string|null=searchParams.get("page")

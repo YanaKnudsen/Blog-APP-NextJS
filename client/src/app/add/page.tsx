@@ -46,6 +46,20 @@ export default function AddPost() {
         resolver: zodResolver(schema),
     })
 
+    const title = useDraftStore((state) => state.title);
+    const description = useDraftStore((state) => state.description);
+    const post_id = useDraftStore((state) => state.id);
+
+/*
+    useEffect(() => {
+        if(title){
+            setValue("title",title,{ shouldValidate: true });
+            setValue("description",description,{ shouldValidate: true })
+            useDraftStore.setState({title:""})
+            useDraftStore.setState({description:""})
+        }
+    }, [title]);*/
+
 
 
 
@@ -55,12 +69,19 @@ export default function AddPost() {
 
     async function submitPost(values:z.infer<typeof schema>,isDraft:boolean){
 
-        const res=await fetch("/api/post/create",{
+        const res=await fetch("/api/post/edit",{
             method:"POST",
             headers:{
                 'Content-Type':'application/json'
             },
-            body:JSON.stringify({
+            body:JSON.stringify(post_id?{
+                title:values.title,
+                description:values.description,
+                slug:slugify(values.title),
+                published: isDraft,
+                userId:id,
+                id:post_id,
+            }:{
                 title:values.title,
                 description:values.description,
                 slug:slugify(values.title),
@@ -71,11 +92,14 @@ export default function AddPost() {
         if (res.ok) {
             console.log(res);
             reset();
+            useDraftStore.setState({id:""})
+
             route.push("/profile");
 
 
           }else{
               console.error("failed")
+            console.log(res);
               //show error message here from res
           }
 

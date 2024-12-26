@@ -1,5 +1,5 @@
 "use client"
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {TypographyH1} from "@/components/ui/typography/typography";
 import {Post} from "@/@types/post"
 import PostTitle from "@/components/Blog/PostTitle";
@@ -11,6 +11,7 @@ import {z} from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import slugify from "slugify";
+import {useDraftStore} from "@/store/zustand";
 
 const schema = z.object({
     title: z
@@ -27,12 +28,25 @@ const schema = z.object({
 
 export default function PostEditingField({register,setValue,setIsMatter,setMarkdownHtml,errors}:{}) {
 
+    const title = useDraftStore((state) => state.title);
+    const description = useDraftStore((state) => state.description);
+
+
+    useEffect(() => {
+        if(title){
+            setValue("title",title,{ shouldValidate: true });
+            setValue("description",description,{ shouldValidate: true })
+            useDraftStore.setState({title:""})
+            useDraftStore.setState({description:""})
+            handleMarkdownChange(description);
+
+        }
+    }, [title]);
 
 
 
-
-    const handleMarkdownChange = async (event: React.ChangeEvent<HTMLTextAreaElement >) => {
-        const input = event.target.value;
+    const handleMarkdownChange = async (input:string) => {
+       // const input = event.target.value;
         setValue("description",input,{ shouldValidate: true })
         const { title: matterTitle, html: markdown } = await markdownToHTML(input);
         console.log("matterTitle, html: markdown",matterTitle, markdown)
@@ -68,7 +82,9 @@ export default function PostEditingField({register,setValue,setIsMatter,setMarkd
                 <Textarea placeholder="What are you thinking about?"
                           id="description"
                           required
-                          onChangeCapture={handleMarkdownChange}
+                          onChangeCapture={(e)=> {
+                              handleMarkdownChange(e.target.value)
+                          }}
                           className="min-h-[350px] max-h-[350px]"
                           {...register("description")}
                 />

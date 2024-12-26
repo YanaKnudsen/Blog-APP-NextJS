@@ -22,7 +22,7 @@ const userSchema = z.object({
         }),
 });
 
-//create new user
+//edit new user
 export async function POST(req: Request) {
     //return NextResponse.json({success:true})
     try {

@@ -2,7 +2,7 @@ import {NextResponse} from "next/server";
 import {prisma} from "@/utils/db";
 import slugify from "slugify";
 
-//create new post
+//edit new post
 export async function GET(req: Request) {
     const {searchParams}=new URL(req.url);
     console.log("searchParams",searchParams)
