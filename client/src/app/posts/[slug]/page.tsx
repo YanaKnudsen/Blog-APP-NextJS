@@ -4,48 +4,45 @@ import PostInfo from "@/components/Blog/PostInfo";
 import {markdownToHTML} from "@/helpers";
 import CommentForm from "@/components/Forms/CommentForm";
 import Comments from "@/components/Comments/Comments";
+import fetchComments from "@/server/actions/fetch-comments";
+import fetchPosts from "@/server/actions/fetch-posts";
+import {getServerSession} from "next-auth";
+import {authOptions} from "@/utils/auth";
+import {TypographyH3} from "@/components/ui/typography/typography";
 
 
 
 
 
-export default async function PostPage({ params }: { params: { slug: string } }) {
-    const queryClient=new QueryClient();
+export default async function PostPage({ params }: { params: { slug: string ,page:string } }) {
+    const queryClient = new QueryClient()
+    const page = parseInt(params.page) || 1;
     const { slug } = params;
-    console.log("slug",slug)
     const postData= await fetchData(slug);
     const { title: matterTitle, html: markdown } = await markdownToHTML(postData.description);
     const title = matterTitle? "" : postData.title;
-    console.log(title)
-
-    /*
-
+    const postId=postData.id;
+    const session = await getServerSession(authOptions);
 
 
 
-    //prefetch posts
-      const { isPending, error, data ,fetchStatus} = useQuery({
-          queryKey: ['comments'],
-          queryFn: fetchComments()
-      })
-  if (isPending) return 'Loading...'
-
-  if (error) return 'An error has occurred: ' + error.message
+    await queryClient.prefetchQuery({
+        queryKey:["comments",page,postId,slug],
+        queryFn:fetchComments(page,postId,slug),
+    })
+    const dehydratedState = dehydrate(queryClient);
 
 
-    async function getComments(page:number,id:string,slug:string){
-                const res=await fetchComments(page,id,slug);
-                setComments(res.comments);
-    }
 
-*/
     return (
-        <HydrationBoundary state={dehydrate(queryClient)}>
-        <div className="p-4">
-            <PostInfo post={postData} markdown={markdown} title={title}/>
-            <CommentForm post={postData}/>
-            <Comments post={postData}/>
-        </div>
+        <HydrationBoundary state={ dehydratedState}>
+            <div className="p-4">
+                <PostInfo post={postData} markdown={markdown} title={title}/>
+                <TypographyH3 htmlFor="comment">Comments</TypographyH3>
+                {session && <CommentForm post={postData}/>}
+                <Comments post={postData}/>
+            </div>
         </HydrationBoundary>
+
     );
 }

@@ -2,8 +2,13 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware'
 
 //define types of store
+type DraftStore={
+    title: string,
+    content:string,
+}
 type UserStore={
-
+    name: string,
+    id:string,
 }
 
 
@@ -18,17 +23,16 @@ export  const useUserStore = create((set) => ({
 
 
 
-export const useDraftStore = create((set) => ({
+export const useDraftStore = create<DraftStore>((set) => ({
     title: "",
     content:"",
 
 }))
 //dont need persist just normal
-export const useUserStore = create(
+export const useUserStore = create<UserStore>(
     persist(
         (set, get) => ({
-            user: "",
-            name:"",
+            name: "",
             id:"",
         }),
         {

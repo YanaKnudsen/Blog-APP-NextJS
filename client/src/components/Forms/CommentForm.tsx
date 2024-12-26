@@ -6,6 +6,7 @@ import {useUserStore} from "@/store/zustand";
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea";
 import {Button} from "@/components/ui/button";
+import {Post} from "@/@types/post";
 
 const schema = z.object({
     comment: z
@@ -15,7 +16,7 @@ const schema = z.object({
 
 });
 
-export default function CommentForm({post}) {
+export default function CommentForm({post}:{post:Post}) {
     type CommentSchema = z.infer<typeof schema>;
     const { register, setValue,getValues,handleSubmit ,setError,reset,
         formState: { errors }, } = useForm<CommentSchema>({
@@ -57,7 +58,6 @@ export default function CommentForm({post}) {
                         <div className="flex flex-col gap-2">
 
                             <div className="grid gap-2">
-                                <Label htmlFor="comment">Comments</Label>
                                 <Textarea placeholder="Add your comment..."
                                           id="comment"
                                           required

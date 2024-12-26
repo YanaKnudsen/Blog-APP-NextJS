@@ -31,7 +31,7 @@ export async function GET(req: Request) {
         const [posts,count]=await prisma.$transaction([
             prisma.post.findMany(query),
             prisma.post.count({
-                ...(userId ? {where: {userId: userId}} : {}),
+                ...(userId ? {where: {userId: userId}} : {where: { published: true } }),
             }),
         ])
 

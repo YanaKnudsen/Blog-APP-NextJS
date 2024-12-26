@@ -24,13 +24,13 @@ export async function GET(req: Request) {
             post:true,
         },
         ...(id ? { where: { postId: id } } : {}),
-        orderBy: { createdAt: 'desc' },
 
     }
     try {
         const [comments,count]=await prisma.$transaction([
             prisma.comment.findMany(query),
             prisma.comment.count({
+                ...(id ? { where: { postId: id } } : {}),
             }),
         ])
        // revalidatePath(`/posts/${slug}`)

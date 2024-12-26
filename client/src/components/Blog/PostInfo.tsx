@@ -1,8 +1,9 @@
 "use client"
 import {useState} from "react";
 import {TypographyH1} from "@/components/ui/typography/typography";
+import {Post} from "@/@types/post"
 
-export default function PostInfo({post,markdown,title = ""}) {
+export default function PostInfo({post,markdown,title = ""}:{post:Post,markdown:string,title:string}) {
     const [markdownHtml, setMarkdownHtml] = useState<string | null>(null);
 
 
