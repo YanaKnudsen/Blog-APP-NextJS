@@ -16,6 +16,7 @@ import { promises as fs } from 'fs';
 import {useDraftStore, useUserStore} from "@/store/zustand";
 import {markdownToHTML} from "@/helpers";
 import Preview from "@/components/Blog/Preview";
+import PostEditingField from "@/components/Blog/PostEditingField";
 
 const schema = z.object({
     title: z
@@ -37,18 +38,7 @@ export default function AddPost() {
     const [markdownHtml, setMarkdownHtml] = useState<string | null>(null);
     const [isPreview, setIsPreview ]= useState<boolean>(false);
 
-    const title = useDraftStore((state) => state.title);
-    const description = useDraftStore((state) => state.description);
 
-
-    useEffect(() => {
-        if(title){
-            setValue("title",title,{ shouldValidate: true });
-            setValue("description",description,{ shouldValidate: true })
-            useDraftStore.setState({title:""})
-            useDraftStore.setState({description:""})
-        }
-    }, [title,description]);
 
 
     const { register, setValue,getValues,handleSubmit ,setError,reset,
@@ -57,26 +47,6 @@ export default function AddPost() {
     })
 
 
-    const handleMarkdownChange = async (event: React.ChangeEvent<HTMLTextAreaElement >) => {
-        const input = event.target.value;
-        setValue("description",input,{ shouldValidate: true })
-        const { title: matterTitle, html: markdown } = await markdownToHTML(input);
-        if(matterTitle){
-            setValue("title",matterTitle, { shouldValidate: true });
-            setIsMatter(true);
-        }
-        setMarkdownHtml(markdown);
-
-
-
-
-
-    };
-
-    const handleTitleChange = async (event: React.ChangeEvent<HTMLInputElement >) => {
-        const value = event.target.value;
-        setValue("title", value, { shouldValidate: true });
-    }
 
 
     const id = useUserStore((state) => state.id);
@@ -110,11 +80,13 @@ export default function AddPost() {
           }
 
     }
+
+
     async function readFile(e){
-        const uploadedFile=e.target.files?.[0];
         const reader = new FileReader()
         reader.onload = async (e) => {
             const text = (e.target.result)
+            console.log("button text",text)
             setValue("description", text, { shouldValidate: true });
             const { title: matterTitle, html: markdown } = await markdownToHTML(text);
             if(matterTitle){
@@ -164,7 +136,11 @@ export default function AddPost() {
                         </h3>
                     <div className="flex flex-row gap-2 justify-end items-center ">
 
-                         <input  ref={hiddenFileInput} type="file" name="uploadMarkdown" className="hidden" onChange={(e)=>readFile(e)}/>
+                         <input  ref={hiddenFileInput} type="file" name="uploadMarkdown" className="hidden" onChange={(e)=> {
+                             console.log("button clicke")
+                             readFile(e);
+                             hiddenFileInput.current.value=""
+                         }}/>
                         <Button className="" type="button" onClick={handleClick} >Import markdown</Button>
                         <Button className="" type="button" onClick={()=>{setIsPreview(!isPreview)}}>{isPreview?"Edit":"Preview"}</Button>
                     </div>
@@ -172,33 +148,7 @@ export default function AddPost() {
                     <div className="  w-full overflow-auto p-1">
                         {isPreview ?(
                                 <Preview isMatter={isMatter} markdownHtml={markdownHtml} getValues={getValues}/>):
-                            (<div className="flex flex-col gap-2">
-                                <div className="grid gap-2">
-                                    <Label htmlFor="name">Title</Label>
-                                    <Input
-                                        id="title"
-                                        type="text"
-                                        placeholder="Post title"
-                                        onChangeCapture={handleTitleChange}
-                                        {...register("title")}
-                                    />
-                                    {errors.title && <p className="text-red-500 text-sm">{errors.title.message}</p>}
-                                </div>
-                                <div className="grid gap-2">
-                                    <Label htmlFor="name">Content</Label>
-                                    <Textarea placeholder="What are you thinking about?"
-                                              id="description"
-                                              required
-                                              onChangeCapture={handleMarkdownChange}
-                                              className="min-h-[350px] max-h-[350px]"
-                                              {...register("description")}
-                                    />
-                                    {errors.description && <p className="text-red-500 text-sm">{errors.description.message}</p>}
-                                </div>
-
-
-
-                            </div>)}
+                            (<PostEditingField register={register} setValue={setValue} setIsMatter={setIsMatter} setMarkdownHtml={setMarkdownHtml} errors={errors}/>)}
 
                     </div>
 
