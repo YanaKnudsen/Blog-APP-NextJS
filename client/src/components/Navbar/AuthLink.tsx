@@ -4,6 +4,7 @@ import Link from "next/link";
 import {Button} from "@/components/ui/button";
 import {signOut, useSession} from "next-auth/react";
 import {useUserStore} from "@/store/zustand";
+import {router} from "next/client";
 
 export default function AuthLink() {
     const {status}=useSession();
@@ -15,10 +16,9 @@ export default function AuthLink() {
                     <Link href="/profile">Profile</Link>
                     <Link href="/add">New post</Link>
                     <Button onClick={()=> {
-                        signOut();
+                        signOut({callbackUrl: '/', redirect:true});
                         useUserStore.setState({id:""})
                         useUserStore.setState({name:""})
-
                     }}>Log out</Button>
                 </div>}
 
