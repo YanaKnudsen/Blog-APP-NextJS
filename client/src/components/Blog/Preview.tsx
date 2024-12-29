@@ -2,7 +2,7 @@
 import PostTitle from "@/components/Blog/PostTitle";
 
 
-export default function Preview({isMatter,getValues,markdownHtml}:{isMatter:boolean,getValues:Function,markdownHtml:string|null}) {
+export default function Preview({isMatter,getValues,markdownHtml}:{isMatter:boolean,getValues:()=>void,markdownHtml:string|null}) {
 
 
     return (

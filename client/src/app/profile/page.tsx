@@ -2,14 +2,17 @@ import UserInfo from "@/components/Profile/UserInfo";
 import Posts from "@/components/Blog/Posts";
 import { getServerSession } from "next-auth"
 import {authOptions} from "@/utils/auth";
-import {QueryClient,HydrationBoundary,dehydrate,useQuery} from "@tanstack/react-query";
+import {QueryClient,HydrationBoundary,dehydrate} from "@tanstack/react-query";
 
 
-export default async function ProfilePage({searchParams}:{ searchParams: { page:string }}) {
-    const page = parseInt(searchParams.page??1) || 1;
+export default async function ProfilePage(props: { searchParams: Promise<{ page: string}> }) {
+    const {  searchParams } = props;
+    const resolvedSearchParams = await searchParams;
+    const page = await parseInt(resolvedSearchParams.page??1) || 1;
     const session = await getServerSession(authOptions);
     const queryClient = new QueryClient()
     const dehydratedState = dehydrate(queryClient);
+    console.log("session",session)
 
     return (
         <HydrationBoundary state={ dehydratedState}>

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import NavItems from "@/components/Navbar/NavItems";
 export default function MainNav() {
     return (

@@ -1,6 +1,7 @@
-export default async function fetchPosts(page: number,postsPerPage:number,userId: string = ""){
 
-    const res=await fetch(`http://localhost:3000/api/posts?page=${page}&take=${postsPerPage}&userId=${userId}`,{
+export default async function fetchPosts(page: number=1,postsPerPage:number=10,userId: string = ""){
+
+    const res=await fetch(`/api/posts?page=${page}&take=${postsPerPage}&userId=${userId}`,{
         method:"GET",
         headers:{
             'Content-Type':'application/json'

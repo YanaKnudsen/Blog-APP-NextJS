@@ -1,7 +1,6 @@
 import {NextResponse} from "next/server";
 import {prisma} from "@/utils/db";
-import slugify from "slugify";
-import {revalidatePath} from "next/cache";
+
 
 //edit new post
 export async function GET(req: Request) {
@@ -9,7 +8,6 @@ export async function GET(req: Request) {
     const page:string|null=searchParams.get("page")
     const take:string|null=searchParams.get("take")
     const id :string|null=searchParams.get("id")
-    const slug :string|null=searchParams.get("slug")
     console.log("id",id)
 
 
@@ -34,10 +32,11 @@ export async function GET(req: Request) {
             }),
         ])
        // revalidatePath(`/posts/${slug}`)
-        return new NextResponse(JSON.stringify({comments,count},{status:200}));
+        return NextResponse.json({comments,count}, { status:200 })
+
     } catch (err) {
         console.log(err);
-        return new NextResponse(JSON.stringify({message:"Unexpected error"},{status:500}));
+        return NextResponse.json({message:"Unexpected error"}, { status:500 })
 
     }
 

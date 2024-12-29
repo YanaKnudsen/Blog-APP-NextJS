@@ -39,17 +39,16 @@ export async function POST(req: Request) {
         //add new user to the database
         //add random salt
         const hashedPassword=await hash(password,10) ;
-        const newUser=await prisma.user.create({
+        await prisma.user.create({
             data:{
                 name,
                 email,
                 password:hashedPassword
             }
         })
-        const {password:newUserPassword,...rest}=newUser
 
-        return NextResponse.json({user:rest,message:"User created successfully"},{status:201})
+        return NextResponse.json({message:"User created successfully"},{status:201})
     } catch (err) {
-        return NextResponse.json({message:"Unexpected error"},{status:500})
+        return NextResponse.json({err,message:"Unexpected error"},{status:500})
     }
 }

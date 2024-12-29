@@ -1,4 +1,3 @@
-import Link from "next/link";
 import {ModeToggle} from "@/components/ModeToggle";
 import AuthLink from "@/components/Navbar/AuthLink";
 

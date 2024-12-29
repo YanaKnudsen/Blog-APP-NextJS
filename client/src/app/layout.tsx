@@ -2,13 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar/Navbar";
-import Footer from "@/components/Footer/Footer";
 import ScreenSizeIndicator from "@/components/ScreenSizeIndicator";
 import {ThemeProvider} from "../providers/theme-provider";
-import AuthProvider from "@/providers/auth-provider";
-import { Provider as NextAuthProvider } from "next-auth/client";
-import {SessionProvider} from "next-auth/react";
-import {session} from "next-auth/core/routes";
 import QueryProvider from "@/providers/query-provider";
 
 
@@ -28,10 +23,9 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-  children,session
+  children
 }: Readonly<{
-  children: React.ReactNode;
-  session:any;
+  children: React.ReactNode
 }>) {
 
     return (

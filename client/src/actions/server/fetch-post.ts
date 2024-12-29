@@ -1,5 +1,5 @@
 export default async function fetchData (slug:string) {
-    const res = await fetch(process.env.URL +`/api/posts/${slug}`, {
+    const res = await fetch(process.env.URL+`/api/posts/${slug}`, {
         cache: "no-store",
     });
 

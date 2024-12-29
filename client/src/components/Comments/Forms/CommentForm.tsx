@@ -3,7 +3,6 @@ import {z} from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useForm} from "react-hook-form";
 import {useUserStore} from "@/store/zustand";
-import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea";
 import {Button} from "@/components/ui/button";
 import {Post} from "@/@types/post";
@@ -16,13 +15,13 @@ const schema = z.object({
 
 });
 
-export default function CommentForm({post}:{post:Post}) {
+export default function CommentForm({post}: { post: Post }) {
     type CommentSchema = z.infer<typeof schema>;
-    const { register, setValue,getValues,handleSubmit ,setError,reset,
-        formState: { errors }, } = useForm<CommentSchema>({
+    const {register, handleSubmit, reset,
+        formState: { errors }, }
+    = useForm<CommentSchema>({
         resolver: zodResolver(schema),
     })
-    const name = useUserStore((state) => state.name);
     const id = useUserStore((state) => state.id);
 
     async function submitComment(values:z.infer<typeof schema>){

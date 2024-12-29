@@ -1,32 +1,15 @@
 "use client"
-import {useEffect, useRef, useState} from "react";
-import {TypographyH1} from "@/components/ui/typography/typography";
-import {Post} from "@/@types/post"
-import PostTitle from "@/components/Blog/PostTitle";
+import {Dispatch, SetStateAction, useEffect} from "react";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import {Textarea} from "@/components/ui/textarea";
 import {markdownToHTML} from "@/helpers";
-import {z} from "zod";
-import {useForm} from "react-hook-form";
-import {zodResolver} from "@hookform/resolvers/zod";
-import slugify from "slugify";
 import {useDraftStore} from "@/store/zustand";
-
-const schema = z.object({
-    title: z
-        .string()
-        .min(5, "Title must be at least 5 characters long")
-        .max(100, "Title must not exceed 100 characters"),
-    description: z
-        .string()
-        .min(20, "Post text must be at least 20 characters long"),
+import {FieldErrors, UseFormRegister, UseFormSetValue} from "react-hook-form";
 
 
-});
 
-
-export default function PostEditingField({register,setValue,setIsMatter,setMarkdownHtml,errors}:{}) {
+export default function PostEditingField({register,setValue,setIsMatter,setMarkdownHtml,errors}:{register:UseFormRegister<{ title: string; description: string; }>,setValue:UseFormSetValue<{ title: string; description: string; }>,setIsMatter:Dispatch<SetStateAction<boolean>>,setMarkdownHtml: Dispatch<SetStateAction<string|null>>,errors:FieldErrors<{ title: string; description: string; }>}) {
 
     const title = useDraftStore((state) => state.title);
     const description = useDraftStore((state) => state.description);
@@ -41,12 +24,11 @@ export default function PostEditingField({register,setValue,setIsMatter,setMarkd
             handleMarkdownChange(description);
 
         }
-    }, [title]);
+    });
 
 
 
     const handleMarkdownChange = async (input:string) => {
-       // const input = event.target.value;
         setValue("description",input,{ shouldValidate: true })
         const { title: matterTitle, html: markdown } = await markdownToHTML(input);
         console.log("matterTitle, html: markdown",matterTitle, markdown)

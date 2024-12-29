@@ -1,11 +1,7 @@
 "use client"
 import {Pagination,PaginationContent,PaginationItem,PaginationPrevious,PaginationLink,PaginationEllipsis,PaginationNext} from "@/components/ui/pagination";
-import { useRouter } from "next/navigation";
-import {useEffect, useState} from "react";
 
-export default function PaginationComponent({currentPage,setCurrentPage,take,count}:{currentPage:number,setCurrentPage:Function, take:number,count:number}) {
-    const router=useRouter();
-
+export default function PaginationComponent({currentPage,setCurrentPage,take,count}:{currentPage:number,setCurrentPage:()=>void, take:number,count:number}) {
 
 
     function showNext(){

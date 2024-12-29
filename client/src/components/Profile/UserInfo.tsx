@@ -5,7 +5,7 @@ import {useEffect} from "react";
 import {useUserStore} from '../../store/zustand';
 
 export default function UserInfo() {
-    const {data:session,status}=useSession()
+    const {data:session}=useSession()
     console.log("session",session)
     const name = useUserStore((state) => state.name);
     useEffect(() => {
@@ -13,7 +13,7 @@ export default function UserInfo() {
             useUserStore.setState({id:session.user.id})
             useUserStore.setState({name:session.user.name})
         }
-    }, []);
+    }, [session]);
 
 
     return (

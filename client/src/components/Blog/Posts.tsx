@@ -1,11 +1,8 @@
 "use client"
-import fetchPosts from "../../server/actions/fetch-posts";
-import {Post} from "@/@types/post";
+import fetchPosts from "@/actions/client/fetch-posts";
 import PostCard from "@/components/Blog/PostCard";
-import PostsPagination from "@/components/Pagination";
 import {useQuery}  from "@tanstack/react-query";
-import fetchComments from "@/server/actions/fetch-comments";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import PaginationComponent from "@/components/Pagination/PaginationComponent";
 
 
@@ -15,8 +12,7 @@ export default function Posts({ page,label,id}:{ page:number,label:string,id:str
     /*const postsData:{posts:Post[],count:number}= await fetchPosts(currentPage,take,id);
     console.log("postsData",postsData);*/
     const [currentPage,setCurrentPage]=useState<number>(page);
-    const [take,setTake]=useState<number>(4);
-
+    const [take]=useState<number>(4);
 
     const { data } = useQuery({
         queryKey:["posts",currentPage,take,id],

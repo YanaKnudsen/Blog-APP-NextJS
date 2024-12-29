@@ -11,10 +11,10 @@ export async function POST(req: Request) {
         });
         console.log(newPost);
 
-        return new NextResponse(JSON.stringify(newPost,{status:200}));
+       // return new NextResponse(JSON.stringify(newPost,{status:200}));
+        return NextResponse.json(newPost, { status:200 })
     } catch (err) {
         console.log(err);
-        return new NextResponse(JSON.stringify({message:"Unexpected error"},{status:500}));
-
+        return NextResponse.json({message:"Unexpected error"}, { status:500 })
     }
 }

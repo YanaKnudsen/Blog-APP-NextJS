@@ -1,8 +1,14 @@
-import {withAuth,NextRequestWithAuth} from "next-auth/middleware"
+import {withAuth} from "next-auth/middleware"
+import {NextResponse} from "next/server";
+import type { NextRequest } from 'next/server'
+
 
 export default withAuth(
-    function middleware(request:NextRequestWithAuth){
-       // console.log(request.nextUrl.pathname)
+    function middleware(request:NextRequest){
+       // const url = request.nextUrl.clone()
+      //  url.pathname = '/dest'
+        //  return NextResponse.rewrite(url)
+        console.log("path",request.nextUrl.pathname)
       //  console.log("token",request.nextauth.token)
     },{
         callbacks:{

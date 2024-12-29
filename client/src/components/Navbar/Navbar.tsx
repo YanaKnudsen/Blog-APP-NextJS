@@ -2,7 +2,6 @@
 import Link from "next/link";
 import MainNav from "@/components/Navbar/MainNav";
 import MobileNav from "@/components/Navbar/MobileNav";
-import {ModeToggle} from "@/components/ModeToggle";
 import {useUserStore} from "@/store/zustand";
 export default function Navbar() {
     const name = useUserStore((state) => state.name)

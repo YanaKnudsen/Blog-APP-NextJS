@@ -1,6 +1,5 @@
 import {NextResponse} from "next/server";
 import {prisma} from "@/utils/db";
-import slugify from "slugify";
 
 //edit new post
 export async function POST(req: Request) {
@@ -30,6 +29,8 @@ export async function POST(req: Request) {
                     },
                 });
                 console.log("Post updated:", responsePost);
+               return NextResponse.json(responsePost, { status:200 })
+
            }else{
                console.log("creating post")
                const responsePost = await prisma.post.create({
@@ -37,18 +38,16 @@ export async function POST(req: Request) {
                });
 
                console.log("Post created:", responsePost);
+               return NextResponse.json(responsePost, { status:200 })
            }
 
-
-           return new NextResponse(JSON.stringify(responsePost,{status:200}));
        }
        else{
-           return new NextResponse(JSON.stringify({message:"Unexpected error"},{status:500}));
+           return NextResponse.json({message:"Unexpected error"}, { status:500 })
        }
 
     } catch (err) {
         console.log(err);
-        return new NextResponse(JSON.stringify({message:"Unexpected error"},{status:500}));
-
+        return NextResponse.json({message:"Unexpected error"}, { status:500 })
     }
 }

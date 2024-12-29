@@ -4,13 +4,11 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import {prisma} from "@/utils/db";
 import {PrismaAdapter} from "@auth/prisma-adapter";
 import {compare} from "bcrypt";
-import Credentials from "next-auth/providers/credentials";
-import GitHub from "next-auth/providers/github";
-import Google from "next-auth/providers/google";
+import {AuthOptions} from "next-auth";
 
 
 
-export const authOptions ={
+export const authOptions:AuthOptions ={
     adapter:PrismaAdapter(prisma),
     session:{
         strategy:'jwt'

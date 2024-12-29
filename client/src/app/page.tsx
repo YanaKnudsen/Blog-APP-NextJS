@@ -1,15 +1,20 @@
 import Posts from "@/components/Blog/Posts";
 import {QueryClient,HydrationBoundary,dehydrate} from "@tanstack/react-query";
-import fetchPosts from "@/server/actions/fetch-posts";
+import fetchPosts from "@/actions/client/fetch-posts";
 
 
 
-export default async function Home({ searchParams }:{ searchParams: { page:string } }) {
+export default async function Home( props: { searchParams: Promise<{ page: string }> }) {
     const queryClient = new QueryClient()
-    const page = parseInt(searchParams.page??"1") || 1;
+    const {  searchParams } = props;
+    console.log("searchParams",searchParams)
+    const resolvedSearchParams = await searchParams;
+    const page =  parseInt(resolvedSearchParams.page??"1") || 1;
+    console.log("page",page)
+
     await queryClient.prefetchQuery({
         queryKey:["posts",page],
-        queryFn:fetchPosts(page),
+        queryFn: () => fetchPosts(page),
     })
     const dehydratedState = dehydrate(queryClient)
 

@@ -1,6 +1,7 @@
 import {NextResponse} from "next/server";
 import {prisma} from "@/utils/db";
-import slugify from "slugify";
+
+
 
 //edit new post
 export async function GET(req: Request) {
@@ -19,10 +20,13 @@ export async function GET(req: Request) {
 
     const pageNumber:number = page ? Number(page) : 1; // Default to 1 if null
     const takeNumber:number  = take ? Number(take) : 4; // Default to 10 if null
-    const query={
+    const query:object={
         take: takeNumber,
         skip: takeNumber * (pageNumber - 1),
-        ...(userId ? { where: { userId: userId } } : {where: { published: true }}),
+     //   ...(userId ? { where: { userId: userId } } : {where: { published: true }}),
+        where: userId
+            ? { userId: userId } // Filter by userId if provided
+            : { published: true },
         include: { user: true },
         orderBy: { createdAt: 'desc' },
 
@@ -31,14 +35,16 @@ export async function GET(req: Request) {
         const [posts,count]=await prisma.$transaction([
             prisma.post.findMany(query),
             prisma.post.count({
-                ...(userId ? {where: {userId: userId}} : {where: { published: true } }),
+               // ...(userId ? {where: {userId: userId}} : {where: { published: true } }),
+                where: userId
+                    ? { userId: userId } // Filter by userId if provided
+                    : { published: true },
             }),
         ])
 
-        return new NextResponse(JSON.stringify({posts,count},{status:200}));
+        return NextResponse.json({posts,count}, { status:200 })
     } catch (err) {
         console.log(err);
-        return new NextResponse(JSON.stringify({message:"Unexpected error"},{status:500}));
-
+        return NextResponse.json({message:"Unexpected error"}, { status:500 })
     }
 }

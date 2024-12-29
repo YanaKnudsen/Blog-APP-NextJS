@@ -1,22 +1,15 @@
 "use client"
-import { Input } from "@/components/ui/input"
 import {Button} from "@/components/ui/button";
 import {z} from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {Label} from "@/components/ui/label";
 import slugify from "slugify";
 import {useRouter} from "next/navigation";
-import {useEffect, useRef, useState} from "react";
-import { remark } from 'remark';
-import html from 'remark-html';
-import matter from "gray-matter";
-import { Textarea } from "@/components/ui/textarea"
-import { promises as fs } from 'fs';
+import { useState} from "react";
 import {useDraftStore, useUserStore} from "@/store/zustand";
-import {markdownToHTML} from "@/helpers";
 import Preview from "@/components/Blog/Preview";
 import PostEditingField from "@/components/Blog/PostEditingField";
+import Markdownupload from "@/components/Blog/Markdownupload";
 
 const schema = z.object({
     title: z
@@ -41,26 +34,12 @@ export default function AddPost() {
 
 
 
-    const { register, setValue,getValues,handleSubmit ,setError,reset,
+    const { register, setValue,getValues ,reset,
         formState: { errors,isValid }, } = useForm<Schema>({ mode: 'onChange' ,
         resolver: zodResolver(schema),
     })
 
-    const title = useDraftStore((state) => state.title);
-    const description = useDraftStore((state) => state.description);
     const post_id = useDraftStore((state) => state.id);
-
-/*
-    useEffect(() => {
-        if(title){
-            setValue("title",title,{ shouldValidate: true });
-            setValue("description",description,{ shouldValidate: true })
-            useDraftStore.setState({title:""})
-            useDraftStore.setState({description:""})
-        }
-    }, [title]);*/
-
-
 
 
     const id = useUserStore((state) => state.id);
@@ -106,30 +85,6 @@ export default function AddPost() {
     }
 
 
-    async function readFile(e){
-        const reader = new FileReader()
-        reader.onload = async (e) => {
-            const text = (e.target.result)
-            console.log("button text",text)
-            setValue("description", text, { shouldValidate: true });
-            const { title: matterTitle, html: markdown } = await markdownToHTML(text);
-            if(matterTitle){
-                setValue("title",matterTitle, { shouldValidate: true });
-                setIsMatter(true);
-            }
-            setMarkdownHtml(markdown);
-
-        };
-       reader.readAsText(e.target.files[0]);
-
-    }
-
-    const hiddenFileInput = useRef(null);
-    const handleClick = event => {
-        hiddenFileInput.current.click();
-    };
-
-
     function onPublish(){
             const values=getValues();
             console.log("values",values)
@@ -146,30 +101,23 @@ export default function AddPost() {
 
     return (
         <div className="w-full min-w-screen flex p-8 pb-20 sm:p-20 ">
-            <form onSubmit={handleSubmit(submitPost)}  className="flex flex-col gap-5 w-full">
-            <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+              <form  className="flex flex-col gap-5 w-full">
+                  <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
                 Create new post
             </h1>
-            <div>
-            </div>
 
-                <div className="">
-                    <div className="flex flex-row justify-between items-center mb-2">
+                   <div className="">
+                         <div className="flex flex-row justify-between items-center mb-2">
                         <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
                             {isPreview?"Preview":""}
                         </h3>
                     <div className="flex flex-row gap-2 justify-end items-center ">
 
-                         <input  ref={hiddenFileInput} type="file" name="uploadMarkdown" className="hidden" onChange={(e)=> {
-                             console.log("button clicke")
-                             readFile(e);
-                             hiddenFileInput.current.value=""
-                         }}/>
-                        <Button className="" type="button" onClick={handleClick} >Import markdown</Button>
+                           <Markdownupload setValue={setValue} setIsMatter={setIsMatter} setMarkdownHtml={setMarkdownHtml}/>
                         <Button className="" type="button" onClick={()=>{setIsPreview(!isPreview)}}>{isPreview?"Edit":"Preview"}</Button>
                     </div>
-                    </div>
-                    <div className="  w-full overflow-auto p-1">
+                         </div>
+                       <div className="  w-full overflow-auto p-1">
                         {isPreview ?(
                                 <Preview isMatter={isMatter} markdownHtml={markdownHtml} getValues={getValues}/>):
                             (<PostEditingField register={register} setValue={setValue} setIsMatter={setIsMatter} setMarkdownHtml={setMarkdownHtml} errors={errors}/>)}
@@ -177,7 +125,7 @@ export default function AddPost() {
                     </div>
 
                 </div>
-                <div className="flex flex-row justify-end gap-2">
+               <div className="flex flex-row justify-end gap-2">
                     <Button  type="button" name="draft" disabled={!isValid} onClick={onDraft}>Save Draft</Button>
                     <Button  type="button" name="publish" disabled={!isValid} onClick={onPublish}>Publish</Button>
 

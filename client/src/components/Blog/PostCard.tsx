@@ -1,17 +1,14 @@
 "use client"
-import {Post} from "@/@types/post";
 import {Card, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
 import {Button} from "@/components/ui/button";
 import {useRouter} from "next/navigation";
 import {useEffect, useState} from "react";
-import {useDraftStore, useUserStore} from '../../store/zustand';
+import {useDraftStore} from '../../store/zustand';
 
 
 export default function PostCard({post}) {
     const router=useRouter();
     const [edit,setEdit]=useState<boolean>(false);
-    const title = useDraftStore((state) => state.title);
-    const description = useDraftStore((state) => state.description);
 
     useEffect(() => {
         if(edit){
@@ -20,7 +17,7 @@ export default function PostCard({post}) {
             useDraftStore.setState({id:post.id})
             router.push(`/add`);
         }
-    }, [edit]);
+    });
 
     return (
             <Card key={post.slug} className="w-full max-w-xl rounded-lg shadow-lg overflow-hidden">
