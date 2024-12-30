@@ -9,7 +9,7 @@ import {FieldErrors, UseFormRegister, UseFormSetValue} from "react-hook-form";
 
 
 
-export default function PostEditingField({register,setValue,setIsMatter,setMarkdownHtml,errors}:{register:UseFormRegister<{ title: string; description: string; }>,setValue:UseFormSetValue<{ title: string; description: string; }>,setIsMatter:Dispatch<SetStateAction<boolean>>,setMarkdownHtml: Dispatch<SetStateAction<string|null>>,errors:FieldErrors<{ title: string; description: string; }>}) {
+export default function PostEditingFields({register,setValue,setIsMatter,setMarkdownHtml,errors}:{register:UseFormRegister<{ title: string; description: string; }>,setValue:UseFormSetValue<{ title: string; description: string; }>,setIsMatter:Dispatch<SetStateAction<boolean>>,setMarkdownHtml: Dispatch<SetStateAction<string|null>>,errors:FieldErrors<{ title: string; description: string; }>}) {
 
     const title = useDraftStore((state) => state.title);
     const description = useDraftStore((state) => state.description);
@@ -31,7 +31,6 @@ export default function PostEditingField({register,setValue,setIsMatter,setMarkd
     const handleMarkdownChange = async (input:string) => {
         setValue("description",input,{ shouldValidate: true })
         const { title: matterTitle, html: markdown } = await markdownToHTML(input);
-        console.log("matterTitle, html: markdown",matterTitle, markdown)
         if(matterTitle){
             setValue("title",matterTitle, { shouldValidate: true });
             setIsMatter(true);
