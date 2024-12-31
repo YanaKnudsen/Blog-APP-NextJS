@@ -1,7 +1,4 @@
-"use server"
-import {z} from "zod";
 import slugify from "slugify";
-import {useDraftStore} from "@/store/zustand";
 
 
 export default async function submitPost(title:string,description:string,isDraft:boolean,userId:string) {
@@ -18,12 +15,5 @@ export default async function submitPost(title:string,description:string,isDraft
             userId:userId,
         })
     })
-
-    if(res.ok){
-        const data=await res.json();
-        return data;
-    }
-    else{
-
-    }
+    return res
 };

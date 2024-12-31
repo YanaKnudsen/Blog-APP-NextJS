@@ -36,8 +36,8 @@ export async function POST(req: Request) {
         if(existingUser) {
             return NextResponse.json({user:null,message:"User with this email already exists"},{status:409})
         }
-        //add new user to the database
-        //add random salt
+        //edit new user to the database
+        //edit random salt
         const hashedPassword=await hash(password,10) ;
         await prisma.user.create({
             data:{
