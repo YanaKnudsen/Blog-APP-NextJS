@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 import Navbar from "@/components/Navbar/Navbar";
-import ScreenSizeIndicator from "@/components/ScreenSizeIndicator";
-import {ThemeProvider} from "../providers/theme-provider";
+import ScreenSizeIndicator from "@/components/ui/ScreenSizeIndicator";
+import {ThemeProvider} from "../../providers/theme-provider";
 import QueryProvider from "@/providers/query-provider";
 
 

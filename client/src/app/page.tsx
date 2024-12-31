@@ -19,10 +19,10 @@ export default async function Home( props: { searchParams: Promise<{ page: strin
     const dehydratedState = dehydrate(queryClient)
 
   return (
-      <HydrationBoundary state={ dehydratedState}>
+      <HydrationBoundary state={dehydratedState}>
     <div className="w-full min-w-screen flex min-h-screen p-8 pb-20 sm:p-20 flex-col">
         <main className="flex flex-row h-screen w-full ">
-            <Posts page={page} label={"Discover all posts"} id={""}/>
+            <Posts page={page} label={"Discover all posts"} userId={""}/>
         </main>
     </div>
       </HydrationBoundary>
