@@ -11,4 +11,5 @@ export interface Post {
     description:string,
     createdAt:string,
     updatedAt:string
+    published:boolean,
 }

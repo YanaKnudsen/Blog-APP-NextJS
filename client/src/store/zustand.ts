@@ -1,14 +1,11 @@
-import { create } from 'zustand';
+import {create} from 'zustand';
 import { persist } from 'zustand/middleware'
 
 //define types of store
-type DraftStore={
-    title: string,
-    description:string,
-    id:string,
-}
+
+
 type UserStore={
-    name: string,
+    name: string|null,
     id:string,
 }
 
@@ -23,18 +20,10 @@ export  const useUserStore = edit((set) => ({
 
 
 
-
-export const useDraftStore = create<DraftStore>(() => ({
-    title: "",
-    description:"",
-    id:"",
-
-}))
-//dont need persist just normal
-export const useUserStore = create<UserStore>(
-    persist(
-        () => ({
-            name: "",
+export const useUserStore = create<UserStore>()(
+   persist(
+        ():UserStore => ({
+            name:"",
             id:"",
         }),
         {
@@ -42,7 +31,3 @@ export const useUserStore = create<UserStore>(
         },
     ),
 )
-
-
-
-

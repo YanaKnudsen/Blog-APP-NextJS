@@ -13,4 +13,4 @@ export default withAuth(
     }
 )
 
-export const config={matcher:["/profile","/add"]}
+export const config={matcher:["/profile","/edit"]}

@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "../globals.css";
+import "./globals.css";
 import Navbar from "@/components/Navbar/Navbar";
 import ScreenSizeIndicator from "@/components/ui/ScreenSizeIndicator";
-import {ThemeProvider} from "../../providers/theme-provider";
+import {ThemeProvider} from "../providers/theme-provider";
 import QueryProvider from "@/providers/query-provider";
+import {NextIntlClientProvider} from 'next-intl';
+import {getLocale, getMessages} from 'next-intl/server';
 
 
 const geistSans = Geist({
@@ -22,17 +24,22 @@ export const metadata: Metadata = {
   description: "Coding blog",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children
 }: Readonly<{
   children: React.ReactNode
 }>) {
+    const locale = await getLocale();
+    // Providing all messages to the client
+    // side is the easiest way to get started
+    const messages = await getMessages();
 
     return (
-        <html lang="en">
+        <html lang={locale}>
         <body
             className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
         >
+        <NextIntlClientProvider messages={messages}>
 
         <QueryProvider>
             <ThemeProvider
@@ -46,8 +53,7 @@ export default function RootLayout({
                     <ScreenSizeIndicator/>
             </ThemeProvider>
         </QueryProvider>
-
-
+        </NextIntlClientProvider>
 
         </body>
         </html>

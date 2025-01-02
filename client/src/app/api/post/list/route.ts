@@ -18,7 +18,7 @@ export async function GET(req: Request) {
         where: userId
             ? { userId: userId } // Filter by userId if provided
             : { published: true },
-        orderBy: { updatedAt: 'desc' },
+        orderBy: { createdAt: 'desc' },
         select: {
             id:true,
             title: true,
@@ -41,8 +41,7 @@ export async function GET(req: Request) {
         ])
 
         return NextResponse.json({posts,count}, { status:200 })
-    } catch (err) {
-        console.log(err);
+    } catch {
         return NextResponse.json({message:"Unexpected error"}, { status:500 })
     }
 }

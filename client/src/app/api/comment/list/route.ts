@@ -8,7 +8,6 @@ export async function GET(req: Request) {
     const page:string|null=searchParams.get("page")
     const take:string|null=searchParams.get("take")
     const id :string|null=searchParams.get("id")
-    console.log("id",id)
 
 
 
@@ -34,8 +33,7 @@ export async function GET(req: Request) {
        // revalidatePath(`/posts/${slug}`)
         return NextResponse.json({comments,count}, { status:200 })
 
-    } catch (err) {
-        console.log(err);
+    } catch{
         return NextResponse.json({message:"Unexpected error"}, { status:500 })
 
     }

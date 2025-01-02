@@ -1,9 +1,8 @@
 import slugify from "slugify";
 
 export async function updatePost(title:string,description:string,isDraft:boolean,userId:string,postId:string){
-    try{
-    const res=await fetch(process.env.URL+"/api/post/edit",{
-        method:"PUT",
+    const res=await fetch("/api/post/edit",{
+        method:"POST",
         headers:{
             'Content-Type':'application/json'
         },
@@ -13,12 +12,9 @@ export async function updatePost(title:string,description:string,isDraft:boolean
             slug:slugify(title),
             published: isDraft,
             userId:userId,
-            id:postId,
+            postId:postId,
     })
     })
-    }
-    catch (err) {
-        console.log(err);
-    }
+    return res
 
 }

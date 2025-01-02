@@ -1,7 +1,7 @@
 import slugify from "slugify";
 
 
-export default async function submitPost(title:string,description:string,isDraft:boolean,userId:string) {
+export default async function createPost(title:string, description:string, isDraft:boolean, userId:string) {
     const res=await fetch("/api/post/create",{
         method:"POST",
         headers:{

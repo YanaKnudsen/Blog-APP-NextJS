@@ -4,8 +4,8 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import {prisma} from "@/utils/db";
 import {PrismaAdapter} from "@auth/prisma-adapter";
 import {compare} from "bcrypt";
-import {AuthOptions} from "next-auth";
-
+import {AuthOptions, Session, User} from "next-auth";
+import {JWT} from "next-auth/jwt";
 
 
 export const authOptions:AuthOptions ={
@@ -15,37 +15,37 @@ export const authOptions:AuthOptions ={
     },
     providers: [
         GoogleProvider({
-            clientId:process.env.GOOGLE_ID,
-            clientSecret:process.env.GOOGLE_SECRET
+            clientId:process.env.GOOGLE_ID as string,
+            clientSecret:process.env.GOOGLE_SECRET as string
         }),
         GithubProvider({
-            clientId:process.env.GITHUB_ID,
-            clientSecret:process.env.GITHUB_SECRET
+            clientId:process.env.GITHUB_ID as string,
+            clientSecret:process.env.GITHUB_SECRET as string
         }),
         CredentialsProvider({
             name: "Credentials",
             credentials: {
-                username: { label: "Email", type: "email", placeholder: "sample@mail.com" },
+                email: { label: "Email", type: "email", placeholder: "sample@mail.com" },
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials) {
                 if(!credentials?.email || !credentials?.password){
-                    return null;
+                    throw new Error('Please fill in the form to login');
                 }
                 //find user in the database better fetc api
                 const user=await prisma.user.findUnique({
                     where:{email:credentials?.email}
                 });
                 if(user){
-                    const passwordOk=await compare(credentials.password,user.password);
+                    const passwordOk=await compare(credentials.password,user.password?? "");
                     if (passwordOk){
                         return user
                     }else{
-                        return null;
+                        throw new Error('Password is incorrect');
                     }
 
                 }else{
-                    return null;
+                    throw new Error('User with this email is not registered');
                 }
             }
         })
@@ -56,12 +56,14 @@ export const authOptions:AuthOptions ={
     },
     secret: process.env.AUTH_SECRET,
     callbacks: {
-        async session({ session, token }) {
+        async session({ session, token }:{session:Session, token:JWT}) {
             // Attach token or user data to session if needed
-            session.user.id = token?.id;
+            if (session.user) {
+                session.user.id=token?.id
+            }
             return session;
         },
-        async jwt({ token, user }) {
+        async jwt({ token, user }:{ token:JWT, user:User }) {
             if (user) {
                 token.id = user.id;
             }

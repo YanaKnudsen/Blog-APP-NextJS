@@ -1,6 +1,7 @@
 "use client"
+import {Comment} from "@/@types/comment"
 
-export default function CommentCard({comment}) {
+export default function CommentCard({comment}:{comment:Comment}) {
 
     return (
         <div className="flex flex-col mb-5">

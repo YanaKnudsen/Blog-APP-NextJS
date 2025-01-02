@@ -1,4 +1,4 @@
-import {ModeToggle} from "@/components/ModeToggle";
+import {ModeToggle} from "@/components/ui/ModeToggle";
 import AuthLink from "@/components/Navbar/AuthLink";
 
 export default function NavItems() {

@@ -1,5 +1,67 @@
 {
-  "products": {
-    "cart": "Add to Cart"
+  "HomePage": {
+    "title": "Discover our posts"
+  },
+  "Profile": {
+    "welcome": "Welcome back, ",
+    "title": "My posts"
+  },
+  "EditPost": {
+    "create": "Create a new post",
+    "edit": "Edit post",
+    "back": "Go back",
+    "preview":"Preview",
+    "importMarkdown":"Import markdown",
+    "title":"Title",
+    "titlePlaceholder":"Post title",
+    "content":"Content",
+    "contentPlaceholder":"What are you thinking about?",
+    "saveDraft":"Save Draft",
+    "publish":"Publish"
+  },
+  "PostPage": {
+    "comments":"Comments",
+    "draft":"draft",
+    "edit": "edit",
+    "read": "read"
+  },
+  "Auth": {
+    "welcome":"Welcome back",
+    "oAuthLogin":"Login with your Google or Github account",
+    "google": "Login with Google",
+    "github": "Login with GitHub",
+    "continue":"Or continue with",
+    "email":"Email",
+    "exampleEmail": "m@example.com",
+    "password":"Password",
+    "forgot":"Forgot your password?",
+    "login": "Log in",
+    "noAccount": "Don't have an account?",
+    "account": "Already have an account?",
+    "signup":"Sign up",
+    "name": "Full Name",
+    "policyAgreement": "By clicking continue, you agree to our Terms of Service and Privacy Policy.",
+    "policy": {
+      "main": "By clicking continue, you agree to our",
+      "service": "Terms of Service",
+      "and": "and",
+      "privacy": "Privacy Policy"
+
+    }
+  },
+
+  "Navbar": {
+    "signup":"Sign up",
+    "login":"Log in",
+    "logout":"Log out",
+    "profile":"Profile",
+    "newPost":"New Post",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "Pagination": {
+    "previous":"Previous",
+    "next":"Next"
   }
 }

@@ -1,3 +1,4 @@
+"use client"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -16,8 +17,9 @@ import {z} from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useRouter} from "next/navigation";
+import {useTranslations} from "next-intl";
 
-const LoginSchema = z.object({
+const schema = z.object({
     email: z
         .string().min(1,"Email is required")
         .email({ message: "Please enter a valid email address" }),
@@ -29,98 +31,98 @@ export function LoginForm({
                               ...props
                           }: React.ComponentPropsWithoutRef<"div">) {
 
-    const form= useForm<typeof LoginSchema>({
-        resolver: zodResolver(LoginSchema),
-    });
+    type LoginSchema = z.infer<typeof schema>;
+    const {register, handleSubmit, setError,
+        formState: { errors }, }
+        = useForm<LoginSchema>({
+        resolver: zodResolver(schema),
+    })
     const router=useRouter();
 
-    async function handleLogin(values:z.infer<typeof LoginSchema>){
-        console.log("handling login",values);
+    async function handleLogin(values:z.infer<typeof schema>){
         const data=await signIn("credentials",{
             email:values.email,
             password:values.password,
             redirect: false,
         });
-        console.log(data);
         if (data?.error){
-            console.log(data?.error);
+            setError("password", { type: "custom", message: data?.error })
         }else{
-            console.log("logindata",data)
             router.push("/profile");
         }
 
-
     }
+    const t = useTranslations('Auth')
     return (
         <div className={cn("flex flex-col gap-6", className)} {...props}>
             <Card>
                 <CardHeader className="text-center">
-                    <CardTitle className="text-xl">Welcome back</CardTitle>
+                    <CardTitle className="text-xl">{t('welcome')}</CardTitle>
                     <CardDescription>
-                        Login with your Google account
+                        {t('oAuthLogin')}
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form  onSubmit={form.handleSubmit(handleLogin)}>
+                    <form  onSubmit={handleSubmit(handleLogin)}>
                         <div className="grid gap-6">
                             <div className="flex flex-col gap-4">
                                 <Button variant="outline" className="w-full" onClick={()=>{signIn("google")}}>
                                     <FontAwesomeIcon className="w-6 h-6" icon={faGoogle}/>
-                                    Login with Google
+                                    {t('google')}
                                 </Button>
                                 <Button variant="outline" className="w-full" onClick={()=>{signIn("github")}}>
                                     <FontAwesomeIcon className="w-6 h-6" icon={faGithub}/>
-                                    Login with GitHub
+                                    {t('github')}
                                 </Button>
                             </div>
                             <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
                 <span className="relative z-10 bg-background px-2 text-muted-foreground">
-                  Or continue with
+                  {t('continue')}
                 </span>
                             </div>
                             <div className="grid gap-6">
                                 <div className="grid gap-2">
-                                    <Label htmlFor="email">Email</Label>
+                                    <Label htmlFor="email">{t('email')}</Label>
                                     <Input
                                         id="email"
                                         type="email"
-                                        placeholder="m@example.com"
+                                        placeholder={t('exampleEmail')}
                                         required
-                                        {...form.register("email")}
+                                        {...register("email")}
                                     />
-                                    {form.formState.errors.email && (
+                                    {errors.email && (
                                         <p className="text-red-500 text-sm">
-                                            {form.formState.errors.email.message}
+                                            {errors.email.message}
                                         </p>
                                     )}
 
                                 </div>
                                 <div className="grid gap-2">
                                     <div className="flex items-center">
-                                        <Label htmlFor="password">Password</Label>
+                                        <Label htmlFor="password">{t('password')}</Label>
                                         <a
                                             href="#"
                                             className="ml-auto text-sm underline-offset-4 hover:underline"
                                         >
-                                            Forgot your password?
+                                            {t('forgot')}
                                         </a>
                                     </div>
-                                    <Input id="password" type="password" required  {...form.register("password")}/>
-                                    {form.formState.errors.password && (
+                                    <Input id="password" type="password" required  {...register("password")}/>
+                                    {errors.password && (
                                         <p className="text-red-500 text-sm">
-                                            {form.formState.errors.password.message}
+                                            {errors.password.message}
                                         </p>
                                     )}
 
                                 </div>
                                 <Button type="submit" className="w-full">
-                                    Login
+                                    {t('login')}
                                 </Button>
                             </div>
                             <div className="text-center text-sm">
-                                Don&apos;t have an account?{" "}
+                                {t('noAccount')}{" "}
                                 <a href="/signup" className="underline underline-offset-4">
-                                    Sign up
+                                    {t('signup')}
                                 </a>
                             </div>
                         </div>
@@ -128,9 +130,8 @@ export function LoginForm({
                 </CardContent>
             </Card>
             <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary  ">
-                By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-                and <a href="#">Privacy Policy</a>.
-            </div>
+                {t('policy.main')}{" "}<a href="#">{t('policy.service')}</a>{" "}{t('policy.and')}{" "}<a href="#">{t('policy.privacy')}</a>.
+        </div>
         </div>
     )
 }

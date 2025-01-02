@@ -5,7 +5,6 @@ import {prisma} from "@/utils/db";
 export async function GET(req: Request) {
     const url = new URL(req.url); // Parse the URL from the request
     const slug = url.pathname.split("/").pop();
-    console.log("url",typeof slug)
     try {
         const post = await prisma.post.update({
             where: { slug },
@@ -15,8 +14,7 @@ export async function GET(req: Request) {
 
 
         return NextResponse.json(post, { status:200 })
-    } catch (err) {
-        console.log(err);
+    } catch{
         return NextResponse.json({message:"Unexpected error"}, { status:500 });
 
     }

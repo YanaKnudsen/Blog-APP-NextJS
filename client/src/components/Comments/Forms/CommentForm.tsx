@@ -5,45 +5,31 @@ import {useForm} from "react-hook-form";
 import {useUserStore} from "@/store/zustand";
 import { Textarea } from "@/components/ui/textarea";
 import {Button} from "@/components/ui/button";
-import {Post} from "@/@types/post";
+import createComment from "@/actions/client/create-comment";
 
 const schema = z.object({
     comment: z
         .string()
-        .min(1, "Title must be at least 5 characters long")
-
+        .min(1, "Comment must be at least 5 characters long")
 
 });
 
-export default function CommentForm({post}: { post: Post }) {
+export default function CommentForm({postId}: { postId: string }) {
     type CommentSchema = z.infer<typeof schema>;
-    const {register, handleSubmit, reset,
+    const {register, handleSubmit, reset,setError,
         formState: { errors }, }
     = useForm<CommentSchema>({
         resolver: zodResolver(schema),
     })
-    const id = useUserStore((state) => state.id);
+    const userId = useUserStore((state) => state.id);
 
     async function submitComment(values:z.infer<typeof schema>){
-        const res=await fetch("/api/comment/add",{
-            method:"POST",
-            headers:{
-                'Content-Type':'application/json'
-            },
-            body:JSON.stringify({
-                content:values.comment,
-                userId:id,
-                postId:post.id,
-            })
-        })
+        const res=await createComment(values.comment,postId,userId)
         if (res.ok) {
-            console.log("saved")
             reset();
-
-
         }else{
-            console.error("failed")
-            //show error message here from res
+            const error=await res.json();
+            setError("comment", { type: "custom", message: error.message })
         }
 
     }
@@ -60,7 +46,6 @@ export default function CommentForm({post}: { post: Post }) {
                                 <Textarea placeholder="Add your comment..."
                                           id="comment"
                                           required
-                                    //onChangeCapture={handleMarkdownChange}
                                           className="min-h-[100px] max-h-[150px]"
                                           {...register("comment")}
                                 />

@@ -2,23 +2,16 @@
 import {Card, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
 import {Button} from "@/components/ui/button";
 import {useRouter} from "next/navigation";
-import {useEffect, useState} from "react";
-import {useDraftStore} from '../../store/zustand';
+import {useTranslations} from "next-intl";
+import {Post} from "@/@types/post";
+import {Dispatch, SetStateAction} from "react";
 
 
-export default function PostCard({post}) {
+
+
+export default function PostCard({post, setEditMode,setCurrentPostSlug}:{post:Post,setEditMode:Dispatch<SetStateAction<boolean>>,setCurrentPostSlug:Dispatch<SetStateAction<string|undefined>>}) {
     const router=useRouter();
-    const [edit,setEdit]=useState<boolean>(false);
-
-    useEffect(() => {
-        if(edit){
-            useDraftStore.setState({title:post.title})
-            useDraftStore.setState({description:post.description})
-            useDraftStore.setState({id:post.id})
-            router.push(`/add`);
-        }
-    });
-
+    const t = useTranslations('PostPage');
     return (
             <Card key={post.slug} className="w-full max-w-xl rounded-lg shadow-lg overflow-hidden">
 
@@ -29,9 +22,10 @@ export default function PostCard({post}) {
                     <div className="flex flex-row gap-2">
                     {post.published ?(<Button onClick={()=>{
                         router.push(`/posts/${post.slug}`);
-                    }}>read</Button>):(<Button onClick={() => {
-                        setEdit(true);
-                    }}>edit</Button>)}
+                    }}>{t('read')}</Button>):(<><Button onClick={() => {
+                        setEditMode(true);
+                        setCurrentPostSlug(post.slug);
+                    }}>{t('edit')}</Button></>)}
                     </div>
                     <div className="flex flex-row gap-2 items-center justify-center">
                         <p className="mt-2">{post.user.name}</p>

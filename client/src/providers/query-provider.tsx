@@ -18,7 +18,7 @@ export default function QueryProvider({children}: { children: React.ReactNode })
             })
     )
     return (
-        <AuthProvider >
+        <AuthProvider>
             <QueryClientProvider client={queryClient}>
             {children}
                 <ReactQueryDevtools/>

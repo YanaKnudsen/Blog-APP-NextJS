@@ -1,24 +1,20 @@
 import {NextResponse} from "next/server";
 import {prisma} from "@/utils/db";
 
-//edit new post
+
 export async function POST(req: Request) {
     try {
         const body=await req.json();
-        console.log("data",body)
          const existingPost = await prisma.post.findUnique({
            where:{
               slug: body.slug,
-               NOT:{id:body.id}}
-
+              NOT:{id:body.postId}}
        });
-       console.log("existingPost",existingPost)
        if (!existingPost) {
-           if(body.id){
                // Update the existing post
-               const responsePost = await prisma.post.update({
+               const updatedPost = await prisma.post.update({
                     where: {
-                        id: body.id,
+                        id: body.postId,
                     },
                     data: {
                         title: body.title,
@@ -28,26 +24,14 @@ export async function POST(req: Request) {
                         slug:body.slug,
                     },
                 });
-                console.log("Post updated:", responsePost);
-               return NextResponse.json(responsePost, { status:200 })
-
-           }else{
-               console.log("creating post")
-               const responsePost = await prisma.post.create({
-                   data:body,
-               });
-
-               console.log("Post created:", responsePost);
-               return NextResponse.json(responsePost, { status:200 })
-           }
+                return NextResponse.json(updatedPost, { status:200 })
 
        }
        else{
-           return NextResponse.json({message:"Unexpected error"}, { status:500 })
+           return NextResponse.json({message:"Unable to save the post. Blog post with the same title already exists"}, { status:500 })
        }
 
-    } catch (err) {
-        console.log(err);
+    } catch {
         return NextResponse.json({message:"Unexpected error"}, { status:500 })
     }
 }
