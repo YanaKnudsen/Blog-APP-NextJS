@@ -15,6 +15,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import {useTranslations} from 'next-intl';
 import {Post} from "@/@types/post";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
+import fetchPosts from "@/actions/client/fetch-posts";
 
 const schema = z.object({
     title: z
@@ -49,6 +51,7 @@ export default function PostForm({post,setEditMode,editMode=false}:{post?:Post,s
     const [isMatter, setIsMatter] = useState<boolean>(false);
     const [isPreview, setIsPreview ]= useState<boolean>(false);
     const t = useTranslations('EditPost');
+    const queryClient = useQueryClient();
 
     useEffect(() => {
         if(post){
@@ -57,6 +60,12 @@ export default function PostForm({post,setEditMode,editMode=false}:{post?:Post,s
         }
 
     },[]);
+    const {mutateAsync: editPostMutation} = useMutation({
+        mutationFn: () => fetchPosts(),
+        onSuccess: () => {
+            queryClient.invalidateQueries(["posts"]);
+        }
+    });
 
 
     const { register, setValue,getValues ,reset,setError,
@@ -86,6 +95,7 @@ export default function PostForm({post,setEditMode,editMode=false}:{post?:Post,s
             const res:Response=await createPost(values.title,values.description,isDraft,userId)
             if(res.ok){
                 reset();
+                await editPostMutation();
                 router.push("/profile")
                 if(editMode && setEditMode){
                     setEditMode(false)

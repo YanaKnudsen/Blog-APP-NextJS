@@ -24,6 +24,7 @@ export default function Posts({ page,label,userId=""}:{ page:number,label:string
         queryFn:async ()=>fetchPosts(currentPage,take,userId),
     })
 
+
     useEffect(() => {
         if(currentPostSlug){
             fetchPost(currentPostSlug).then((res)=>{
@@ -46,7 +47,7 @@ export default function Posts({ page,label,userId=""}:{ page:number,label:string
     </h2>
         {postsData?.posts.map((post:Post)=>(
             <div key={post.id} className="w-full flex mb-2 items-center justify-center">
-                <PostCard post={post} setEditMode={setEditMode} setCurrentPostSlug={setCurrentPostSlug}/>
+                <PostCard post={post} setEditMode={setEditMode} setCurrentPostSlug={setCurrentPostSlug} />
             </div>
         ))}
         <PaginationComponent currentPage={currentPage} setCurrentPage={setCurrentPage} take={take} count={postsData?.count} />

@@ -6,6 +6,7 @@ export default async function fetchPosts(page: number=1,postsPerPage:number=10,u
         headers:{
             'Content-Type':'application/json'
         },
+        cache: "no-store",
     })
     if(res.ok){
         const { posts, count } = await res.json();

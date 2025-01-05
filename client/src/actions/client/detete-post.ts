@@ -12,5 +12,6 @@ export default async function deletePost(slug:string,userId:string) {
             userId:userId
         })
     })
+    console.log("post deleted")
     return res
 };

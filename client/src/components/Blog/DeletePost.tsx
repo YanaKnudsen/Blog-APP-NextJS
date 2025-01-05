@@ -1,4 +1,5 @@
 "use client"
+import {useState, useTransition} from "react";
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
@@ -9,19 +10,30 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import {Post} from "@/@types/post";
 import deletePost from "@/actions/client/detete-post";
 import {useRouter} from "next/navigation";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query"
+import fetchPosts from "@/actions/client/fetch-posts";
 
 
-export function DeletePost({slug,userId}:{slug:string,userId:string}) {
+
+export function DeletePost({slug,userId}:{slug:string,userId:string,currentPage:string}) {
+    const queryClient = useQueryClient();
+    const {mutateAsync: deletePostMutation} = useMutation({
+        mutationFn: () => fetchPosts(),
+        onSuccess: () => {
+            queryClient.invalidateQueries(["posts"]);
+        }
+    });
+    const [open, setOpen] = useState(false);
     const router=useRouter();
     async function onDelete(){
-        await deletePost(slug, userId);
-        router.refresh();
+            await deletePost(slug, userId);
+            await deletePostMutation();
+            setOpen(false);
     }
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button variant="destructive">delete</Button>
             </DialogTrigger>

@@ -10,6 +10,7 @@ import {DeletePost} from "@/components/Blog/DeletePost";
 
 
 
+
 export default function PostCard({post, setEditMode,setCurrentPostSlug}:{post:Post,setEditMode:Dispatch<SetStateAction<boolean>>,setCurrentPostSlug:Dispatch<SetStateAction<string|undefined>>}) {
     const router=useRouter();
     const pathname = usePathname()
