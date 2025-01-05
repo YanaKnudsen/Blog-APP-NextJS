@@ -30,6 +30,8 @@ describe("API Post Endpoints", () => {
         jest.clearAllMocks();
     });
 
+    //add test for edge cases
+
     it("creates a new post", async () => {
         const response = await fetch(URL+"/api/post/create", {
             body:JSON.stringify({
@@ -45,7 +47,7 @@ describe("API Post Endpoints", () => {
             method: 'POST',
         });
         const json = await response.json();
-        
+
         expect(response.status).toBe(200)
         expect(json).toMatchObject({
             id: expect.anything(),
@@ -60,5 +62,29 @@ describe("API Post Endpoints", () => {
 
       //  expect(json).toEqual({ id: expect.anything(), title: 'My mock post 1' });
 
+    });
+
+    it("fails to create a post with an existing slug", async () => {
+
+        const response = await fetch(URL+"/api/post/create", {
+            body: JSON.stringify({
+                title: mockPost.title,
+                description: mockPost.description,
+                slug: slugify(mockPost.title),
+                published: mockPost.published,
+                userId: mockPost.userId,
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            method: 'POST',
+        });
+
+        const json = await response.json();
+
+        expect(response.status).toBe(500);
+        expect(json).toMatchObject({
+            message: "Unable to save the post. Blog post with the same title already exists",
+        });
     });
 });
