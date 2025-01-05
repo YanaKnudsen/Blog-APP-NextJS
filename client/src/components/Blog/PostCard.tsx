@@ -5,7 +5,7 @@ import {useRouter,usePathname} from "next/navigation";
 import {useTranslations} from "next-intl";
 import {Post} from "@/@types/post";
 import {Dispatch, SetStateAction} from "react";
-import deletePost from "@/actions/client/detete-post";
+import {DeletePost} from "@/components/Blog/DeletePost";
 
 
 
@@ -28,7 +28,7 @@ export default function PostCard({post, setEditMode,setCurrentPostSlug}:{post:Po
                         setEditMode(true);
                         setCurrentPostSlug(post.slug);
                     }}>{t('edit')}</Button></>)}
-                        {pathname==="/profile"?(<Button variant="destructive" onClick={() => deletePost(post.slug, post.userId)}>delete</Button>):null}
+                        {pathname==="/profile"?(<DeletePost post={post}/>):null}
                     </div>
                     <div className="flex flex-row gap-2 items-center justify-center">
                         <p className="mt-2">{post.user.name}</p>
