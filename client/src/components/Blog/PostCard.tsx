@@ -12,7 +12,7 @@ import fetchPost from "@/actions/client/fetch-post";
 
 
 
-export default function PostCard({post, setEditMode,setPostData}:{post:Post,setEditMode:Dispatch<SetStateAction<boolean>>,setPostData:Dispatch<SetStateAction<Post[]>>}) {
+export default function PostCard({post, setEditMode,setPostData}:{post:Post,setEditMode:Dispatch<SetStateAction<boolean>>,setPostData:Dispatch<SetStateAction<Post | undefined>>}) {
     const router=useRouter();
     const pathname = usePathname()
     const t = useTranslations('PostPage');

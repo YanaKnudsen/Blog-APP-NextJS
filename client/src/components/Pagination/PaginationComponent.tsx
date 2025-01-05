@@ -1,8 +1,7 @@
 "use client"
 import {Pagination,PaginationContent,PaginationItem,PaginationPrevious,PaginationLink,PaginationEllipsis,PaginationNext} from "@/components/ui/pagination";
-import {Dispatch, SetStateAction} from "react";
 
-export default function PaginationComponent({currentPage,setCurrentPage,take,count}:{currentPage:number,setCurrentPage:Dispatch<SetStateAction<number>>, take:number,count:number}) {
+export default function PaginationComponent({currentPage,take,count}:{currentPage:number, take:number,count:number}) {
 
     return (
         <div>

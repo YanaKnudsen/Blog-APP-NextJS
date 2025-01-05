@@ -1,9 +1,8 @@
 "use client"
 import fetchPosts from "@/actions/client/fetch-posts";
-import fetchPost from "@/actions/client/fetch-post";
 import PostCard from "@/components/Blog/PostCard";
 import {useQuery}  from "@tanstack/react-query";
-import {useEffect, useState} from "react";
+import { useState} from "react";
 import PaginationComponent from "@/components/Pagination/PaginationComponent";
 import PostForm from "@/components/Blog/Forms/PostForm";
 import {Post} from "@/@types/post";
@@ -13,11 +12,10 @@ import {Post} from "@/@types/post";
 export default function Posts({ page,label,userId=""}:{ page:number,label:string,userId:string | undefined}) {
     //fetch all posts on server component
     /*const postsData:{posts:Post[],count:number}= await fetchPosts(currentPage,take,id);*/
-    const [currentPage,setCurrentPage]=useState<number>(page);
+    const [currentPage]=useState<number>(page);
     const [take]=useState<number>(4);
     const [editMode,setEditMode]=useState<boolean>(false);
-    const [currentPostSlug,setCurrentPostSlug]=useState<string>();
-    const [postData,setPostData]=useState<Post[]>();
+    const [postData,setPostData]=useState<Post>();
 
     const { data:postsData } = useQuery({
         queryKey:["posts",currentPage,take,userId],
@@ -29,7 +27,7 @@ export default function Posts({ page,label,userId=""}:{ page:number,label:string
             {editMode?
                 (<>
                     {postData?( <PostForm post={postData} setEditMode={setEditMode}
-                               editMode={editMode} setCurrentPostSlug={setCurrentPostSlug}/> ):(<></>)}
+                               editMode={editMode} /> ):(<></>)}
                 </>):
     (<div>
         <h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0 mb-5">
@@ -40,7 +38,7 @@ export default function Posts({ page,label,userId=""}:{ page:number,label:string
                 <PostCard post={post} setEditMode={setEditMode} setPostData={setPostData}/>
             </div>
         ))}
-        <PaginationComponent currentPage={currentPage} setCurrentPage={setCurrentPage} take={take} count={postsData?.count} />
+        <PaginationComponent currentPage={currentPage} take={take} count={postsData?.count} />
     </div>)}
 
 

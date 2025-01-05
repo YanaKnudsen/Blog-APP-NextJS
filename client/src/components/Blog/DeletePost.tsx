@@ -17,12 +17,12 @@ import {useTranslations} from "next-intl";
 
 
 
-export function DeletePost({slug,userId}:{slug:string,userId:string,currentPage:string}) {
+export function DeletePost({slug,userId}:{slug:string,userId:string}) {
     const queryClient = useQueryClient();
     const {mutateAsync: deletePostMutation} = useMutation({
         mutationFn: () => fetchPosts(),
         onSuccess: () => {
-            queryClient.invalidateQueries(["posts"]);
+            queryClient.invalidateQueries({queryKey: ["posts"]});
         }
     });
     const [open, setOpen] = useState(false);
@@ -45,7 +45,7 @@ export function DeletePost({slug,userId}:{slug:string,userId:string,currentPage:
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
-                    <Button type="destructive" onClick={onDelete}>{t('deleteAnyway')}</Button>
+                    <Button type="submit" onClick={onDelete}>{t('deleteAnyway')}</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

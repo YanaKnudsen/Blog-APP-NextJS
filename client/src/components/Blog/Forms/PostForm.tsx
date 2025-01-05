@@ -42,7 +42,7 @@ const schema = z.object({
         }),
 });
 
-export default function PostForm({post,setEditMode,editMode=false,setCurrentPostSlug}:{post?:Post,setEditMode?:Dispatch<SetStateAction<boolean>>,editMode?:boolean}) {
+export default function PostForm({post,setEditMode,editMode=false}:{post?:Post,setEditMode?:Dispatch<SetStateAction<boolean>>,editMode?:boolean}) {
 
 
 
@@ -63,7 +63,7 @@ export default function PostForm({post,setEditMode,editMode=false,setCurrentPost
     const {mutateAsync: editPostMutation} = useMutation({
         mutationFn: () => fetchPosts(),
         onSuccess: () => {
-            queryClient.invalidateQueries(["posts"]);
+            queryClient.invalidateQueries({queryKey: ["posts"]});
         }
     });
 
