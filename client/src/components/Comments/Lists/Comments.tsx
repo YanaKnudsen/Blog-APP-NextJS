@@ -18,7 +18,7 @@ export default function Comments({postId,slug}:{postId:string,slug:string}) {
 
     const { data } = useQuery({
         queryKey:["comments",currentPage,postId,slug],
-        queryFn:async ()=>fetchComments(currentPage,postId,slug),
+        queryFn:async ()=>fetchComments(currentPage,postId),
        // keepPreviousData: true,
     })
 

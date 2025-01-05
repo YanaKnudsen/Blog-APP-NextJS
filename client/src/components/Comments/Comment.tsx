@@ -28,7 +28,7 @@ export default async function currentPage({page,post}:{page:number,post:Post}) {
     return (
         <HydrationBoundary state={ dehydratedState}>
         <TypographyH3 >{t('comments')}</TypographyH3>
-    {session && <CommentForm postId={postId}/>}
+    {session && <CommentForm postId={postId} currentPage={page}/>}
     <Comments postId={postId} slug={slug}/>
         </HydrationBoundary>
 

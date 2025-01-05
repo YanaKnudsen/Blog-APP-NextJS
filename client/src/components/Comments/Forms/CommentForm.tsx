@@ -6,15 +6,24 @@ import {useUserStore} from "@/store/zustand";
 import { Textarea } from "@/components/ui/textarea";
 import {Button} from "@/components/ui/button";
 import createComment from "@/actions/client/create-comment";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
+import fetchComments from "@/actions/client/fetch-comments";
 
 const schema = z.object({
     comment: z
         .string()
-        .min(1, "Comment must be at least 5 characters long")
+        .trim()
+        .min(5, "Comment must be at least 1 character long")
+        .refine((val) => val.replace(/\s/g, '').length >= 1, {
+            message: "Comment must have at least 1 non-empty character",
+        })
+        .refine(val => val !== '', {
+            message: "Comment cannot be empty", // Ensure the description is not empty after trimming
+        }),
 
 });
 
-export default function CommentForm({postId}: { postId: string }) {
+export default function CommentForm({postId,currentPage}: { postId: string,currentPage:string }) {
     type CommentSchema = z.infer<typeof schema>;
     const {register, handleSubmit, reset,setError,
         formState: { errors }, }
@@ -22,10 +31,18 @@ export default function CommentForm({postId}: { postId: string }) {
         resolver: zodResolver(schema),
     })
     const userId = useUserStore((state) => state.id);
+    const queryClient = useQueryClient();
+    const {mutateAsync: createCommentMutation} = useMutation({
+        mutationFn: () => fetchComments(currentPage,postId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ["comments"]});
+        }
+    });
 
     async function submitComment(values:z.infer<typeof schema>){
         const res=await createComment(values.comment,postId,userId)
         if (res.ok) {
+            await createCommentMutation();
             reset();
         }else{
             const error=await res.json();
