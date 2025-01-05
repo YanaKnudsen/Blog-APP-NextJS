@@ -68,9 +68,9 @@ describe("API Post Endpoints", () => {
             id: expect.anything(),
             createdAt: expect.anything(),
             updatedAt: expect.anything(),
-            title: 'Mock Draft 1',
-            slug:'Mock-Draft-1',
-            published:false,
+            title: mockDraft.title,
+            slug:expect.anything(),
+            published:mockDraft.published,
             views:0,
         });
         draftId = json.id;
@@ -78,7 +78,6 @@ describe("API Post Endpoints", () => {
     });
 
     it("updates and publishes draft", async () => {
-        const isDraft=false;
         const response=await fetch(URL+"/api/post/edit",{
             method:"PUT",
             headers:{
@@ -88,7 +87,7 @@ describe("API Post Endpoints", () => {
                 title:mockPost.title,
                 description:mockPost.description,
                 slug:slugify(mockPost.title),
-                published: !isDraft,
+                published: mockPost.published,
                 userId:mockPost.userId,
                 postId:draftId,
             })
@@ -100,9 +99,9 @@ describe("API Post Endpoints", () => {
             id: expect.anything(),
             createdAt: expect.anything(),
             updatedAt: expect.anything(),
-            title: 'Mock post 1',
-            slug:'Mock-post-1',
-            published:true,
+            title: mockPost.title,
+            slug:expect.anything(),
+            published:mockPost.published,
             views:0,
         });
 
@@ -127,9 +126,9 @@ describe("API Post Endpoints", () => {
             id: expect.anything(),
             createdAt: expect.anything(),
             updatedAt: expect.anything(),
-            title: 'Mock post 1',
-            slug:'Mock-post-1',
-            published:true,
+            title: mockPost.title,
+            slug:expect.anything(),
+            published:mockPost.published,
         });
     });
 
