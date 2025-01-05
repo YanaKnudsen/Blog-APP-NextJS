@@ -23,7 +23,7 @@ const schema = z.object({
 
 });
 
-export default function CommentForm({postId,currentPage}: { postId: string,currentPage:string }) {
+export default function CommentForm({postId,currentPage}: { postId: string,currentPage:number }) {
     type CommentSchema = z.infer<typeof schema>;
     const {register, handleSubmit, reset,setError,
         formState: { errors }, }

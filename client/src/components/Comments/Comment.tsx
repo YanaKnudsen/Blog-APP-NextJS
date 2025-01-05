@@ -19,7 +19,7 @@ export default async function currentPage({page,post}:{page:number,post:Post}) {
     const slug=post.slug;
     await queryClient.prefetchQuery({
         queryKey:["comments",page,postId,slug],
-        queryFn:()=>fetchComments(page,postId,slug),
+        queryFn:()=>fetchComments(page,postId),
     })
     const dehydratedState = dehydrate(queryClient);
     const t = await getTranslations('PostPage');

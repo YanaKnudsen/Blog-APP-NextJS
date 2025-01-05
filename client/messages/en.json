@@ -15,13 +15,14 @@
     "title":"Title",
     "titlePlaceholder":"Post title",
     "content":"Content",
-    "contentPlaceholder":"What are you thinking about?",
+    "contentPlaceholder":"What are you thinking about? Write your own post or write a topic and let AI help you.",
     "saveDraft":"Save Draft",
     "publish":"Publish",
     "delete": "delete",
     "deletePost": "Delete post",
     "deleteWarning": "Are you sure you want to delete this post? All data will be permanently lost.",
-    "deleteAnyway": "Delete anyway"
+    "deleteAnyway": "Delete anyway",
+    "generate":"Generate post with AI"
   },
   "PostPage": {
     "comments":"Comments",
