@@ -2,7 +2,7 @@ import slugify from "slugify";
 
 export async function updatePost(title:string,description:string,isDraft:boolean,userId:string,postId:string){
     const res=await fetch("/api/post/edit",{
-        method:"POST",
+        method:"PUT",
         headers:{
             'Content-Type':'application/json'
         },
