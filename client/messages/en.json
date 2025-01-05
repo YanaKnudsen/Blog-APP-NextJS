@@ -22,7 +22,8 @@
     "deletePost": "Delete post",
     "deleteWarning": "Are you sure you want to delete this post? All data will be permanently lost.",
     "deleteAnyway": "Delete anyway",
-    "generate":"Generate post with AI"
+    "generate":"Generate post with AI",
+    "loading": "Loading please wait.."
   },
   "PostPage": {
     "comments":"Comments",
