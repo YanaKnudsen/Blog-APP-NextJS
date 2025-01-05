@@ -13,6 +13,7 @@ const nextConfig: NextConfig = {
         });
         return config;
     },
+    transpilePackages: ['remark-parse','remark-html',"remark"],
 
 };
 

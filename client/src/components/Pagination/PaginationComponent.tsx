@@ -4,35 +4,25 @@ import {Dispatch, SetStateAction} from "react";
 
 export default function PaginationComponent({currentPage,setCurrentPage,take,count}:{currentPage:number,setCurrentPage:Dispatch<SetStateAction<number>>, take:number,count:number}) {
 
-
-    function showNext(){
-        setCurrentPage((prev)=>prev+1);
-
-    }
-    function showPrev(){
-        setCurrentPage((prev)=>prev-1);
-    }
-
-
     return (
         <div>
             <Pagination>
                 <PaginationContent>
                     <PaginationItem>
-                        <PaginationPrevious href="#" onClick={showPrev}
+                        <PaginationPrevious href={`?page=${currentPage - 1}`}
                                             className={
                                                 currentPage<=1  ? "pointer-events-none opacity-50" : undefined
                                             }
                         />
                     </PaginationItem>
                     <PaginationItem>
-                        <PaginationLink href="#">{currentPage}</PaginationLink>
+                        <PaginationLink href={`?page=${currentPage}`}>{currentPage}</PaginationLink>
                     </PaginationItem>
                     <PaginationItem>
                         <PaginationEllipsis />
                     </PaginationItem>
                     <PaginationItem>
-                        <PaginationNext href="#" onClick={showNext}  className={
+                        <PaginationNext href={`?page=${currentPage + 1}`} className={
                             (take*currentPage>=count  )? "pointer-events-none opacity-50" : undefined
                         }/>
                     </PaginationItem>

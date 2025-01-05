@@ -1,16 +1,18 @@
 "use client"
 import {Card, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
 import {Button} from "@/components/ui/button";
-import {useRouter} from "next/navigation";
+import {useRouter,usePathname} from "next/navigation";
 import {useTranslations} from "next-intl";
 import {Post} from "@/@types/post";
 import {Dispatch, SetStateAction} from "react";
+import deletePost from "@/actions/client/detete-post";
 
 
 
 
 export default function PostCard({post, setEditMode,setCurrentPostSlug}:{post:Post,setEditMode:Dispatch<SetStateAction<boolean>>,setCurrentPostSlug:Dispatch<SetStateAction<string|undefined>>}) {
     const router=useRouter();
+    const pathname = usePathname()
     const t = useTranslations('PostPage');
     return (
             <Card key={post.slug} className="w-full max-w-xl rounded-lg shadow-lg overflow-hidden">
@@ -26,6 +28,7 @@ export default function PostCard({post, setEditMode,setCurrentPostSlug}:{post:Po
                         setEditMode(true);
                         setCurrentPostSlug(post.slug);
                     }}>{t('edit')}</Button></>)}
+                        {pathname==="/profile"?(<Button variant="destructive" onClick={() => deletePost(post.slug, post.userId)}>delete</Button>):null}
                     </div>
                     <div className="flex flex-row gap-2 items-center justify-center">
                         <p className="mt-2">{post.user.name}</p>
