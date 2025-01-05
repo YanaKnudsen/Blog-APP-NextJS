@@ -141,11 +141,15 @@ export default function PostForm({post,setEditMode,editMode=false}:{post?:Post,s
                 </h1>
 
                 <div className="">
-                    <div className="flex flex-col justify-between items-center mb-2">
-                        <div className="flex flex-row gap-2 justify-end items-center ">
+                    <div className="flex flex-col justify-center items-end mb-2">
+                        <div className="flex flex-col md:flex-row gap-2 justify-end items-center ">
+                            <div className="flex flex-row gap-2" >
                             <Markdownupload setValue={setValue} setIsMatter={setIsMatter} />
                             <Button className="" type="button" onClick={()=>{setIsPreview(!isPreview)}}>{isPreview?t('edit'):t('preview')}</Button>
+                            </div>
+                            <div className="flex flex-row gap-2 w-full justify-end">
                             <AIGenerator setValue={setValue} getValues={getValues}/>
+                            </div>
                         </div>
                         <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
                         </h3>
