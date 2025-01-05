@@ -14,10 +14,10 @@ import deletePost from "@/actions/client/detete-post";
 import {useRouter} from "next/navigation";
 
 
-export function DeletePost({post}:{post:Post}) {
+export function DeletePost({slug,userId}:{slug:string,userId:string}) {
     const router=useRouter();
-    function onDelete(){
-        deletePost(post.slug, post.userId);
+    async function onDelete(){
+        await deletePost(slug, userId);
         router.refresh();
     }
     return (

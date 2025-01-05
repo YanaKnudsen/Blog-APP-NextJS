@@ -28,7 +28,7 @@ export default function PostCard({post, setEditMode,setCurrentPostSlug}:{post:Po
                         setEditMode(true);
                         setCurrentPostSlug(post.slug);
                     }}>{t('edit')}</Button></>)}
-                        {pathname==="/profile"?(<DeletePost post={post}/>):null}
+                        {pathname==="/profile"?(<DeletePost slug={post.slug} userId={post.userId}/>):null}
                     </div>
                     <div className="flex flex-row gap-2 items-center justify-center">
                         <p className="mt-2">{post.user.name}</p>

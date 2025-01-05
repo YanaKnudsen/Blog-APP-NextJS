@@ -19,11 +19,25 @@ import {Post} from "@/@types/post";
 const schema = z.object({
     title: z
         .string()
+        .trim()
         .min(5, "Title must be at least 5 characters long")
-        .max(100, "Title must not exceed 100 characters"),
+        .max(100, "Title must not exceed 100 characters")
+        .refine((val) => val.replace(/\s/g, '').length >= 5, {
+            message: "Title must have at least 5 non-empty characters",
+        })
+        .refine(val => val !== '', {
+            message: "Title cannot be empty", // Ensure the description is not empty after trimming
+        }),
     description: z
         .string()
-        .min(20, "Post text must be at least 20 characters long"),
+        .trim()
+        .min(20, "Post text must be at least 20 characters long")
+        .refine((val) => val.replace(/\s/g, '').length >= 20, {
+            message: "Description must have at least 20 non-empty characters",
+        })
+        .refine(val => val !== '', {
+            message: "Description cannot be empty", // Ensure the description is not empty after trimming
+        }),
 });
 
 export default function PostForm({post,setEditMode,editMode=false}:{post?:Post,setEditMode?:Dispatch<SetStateAction<boolean>>,editMode?:boolean}) {

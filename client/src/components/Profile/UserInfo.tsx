@@ -7,7 +7,6 @@ import {useTranslations} from 'next-intl';
 
 export default function UserInfo() {
     const {data:session}=useSession()
-    console.log("session",session)
     const name = useUserStore((state) => state.name);
     useEffect(() => {
         if (session) {

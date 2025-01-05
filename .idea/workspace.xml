@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="56a1ec41-4c79-4e1f-808b-98303e907e61" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/client/prisma/dev.db" beforeDir="false" afterPath="$PROJECT_DIR$/client/prisma/dev.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/prisma/schema.prisma" beforeDir="false" afterPath="$PROJECT_DIR$/client/prisma/schema.prisma" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/Blog/DeletePost.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/Blog/DeletePost.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/Blog/Forms/PostForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/Blog/Forms/PostForm.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/Blog/PostCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/Blog/PostCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/Profile/UserInfo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/Profile/UserInfo.tsx" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 7
+}]]></component>
+  <component name="ProjectId" id="2r4KLBfe6kX3o9v58VrgXj4JYq7" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "dev",
+    "last_opened_file_path": "/Users/yanaknudsen/GIT/Blog-APP-NextJS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs.jest.jest_package": "/Users/yanaknudsen/GIT/Blog-APP-NextJS/client/node_modules/jest",
+    "nodejs_package_manager_path": "yarn",
+    "ts.external.directory.path": "/Users/yanaknudsen/GIT/Blog-APP-NextJS/client/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="ReactDesignerToolWindowState">
+    <option name="myId2Visible">
+      <map>
+        <entry key="com.haulmont.rcb.reactComponents" value="false" />
+        <entry key="com.haulmont.rcb.reactInspector" value="false" />
+      </map>
+    </option>
+  </component>
+  <component name="RunManager" selected="Jest.API Post Endpoints">
+    <configuration name="API Post Endpoints" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <jest-package value="$PROJECT_DIR$/client/node_modules/jest" />
+      <working-dir value="$PROJECT_DIR$/client" />
+      <envs />
+      <scope-kind value="SUITE" />
+      <test-file value="$PROJECT_DIR$/client/__tests__/api/post.test.ts" />
+      <test-names>
+        <test-name value="API Post Endpoints" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="API Post Endpoints.creates a new draft" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <jest-package value="$PROJECT_DIR$/client/node_modules/jest" />
+      <working-dir value="$PROJECT_DIR$/client" />
+      <envs />
+      <scope-kind value="TEST" />
+      <test-file value="$PROJECT_DIR$/client/__tests__/api/post.test.ts" />
+      <test-names>
+        <test-name value="API Post Endpoints" />
+        <test-name value="creates a new draft" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="API Post Endpoints.creates a new post" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <jest-package value="$PROJECT_DIR$/client/node_modules/jest" />
+      <working-dir value="$PROJECT_DIR$/client" />
+      <envs />
+      <scope-kind value="TEST" />
+      <test-file value="$PROJECT_DIR$/client/__tests__/api/post.test.ts" />
+      <test-names>
+        <test-name value="API Post Endpoints" />
+        <test-name value="creates a new post" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="Posts.renders" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <jest-package value="$PROJECT_DIR$/client/node_modules/jest" />
+      <working-dir value="$PROJECT_DIR$/client" />
+      <envs />
+      <scope-kind value="TEST" />
+      <test-file value="$PROJECT_DIR$/client/__tests__/posts.test.tsx" />
+      <test-names>
+        <test-name value="Posts" />
+        <test-name value="renders" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Jest.API Post Endpoints" />
+        <item itemvalue="Jest.API Post Endpoints.creates a new draft" />
+        <item itemvalue="Jest.API Post Endpoints.creates a new post" />
+        <item itemvalue="Jest.Posts.renders" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="56a1ec41-4c79-4e1f-808b-98303e907e61" name="Changes" comment="" />
+      <created>1735812850275</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1735812850275</updated>
+      <workItem from="1735812853573" duration="25340000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/client/src/components/Blog/Posts.tsx</url>
+          <line>44</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
