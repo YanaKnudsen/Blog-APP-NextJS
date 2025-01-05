@@ -1,5 +1,5 @@
 "use client"
-import {useState, useTransition} from "react";
+import {useState} from "react";
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
@@ -11,9 +11,9 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import deletePost from "@/actions/client/detete-post";
-import {useRouter} from "next/navigation";
-import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query"
+import {useMutation, useQueryClient} from "@tanstack/react-query"
 import fetchPosts from "@/actions/client/fetch-posts";
+import {useTranslations} from "next-intl";
 
 
 
@@ -26,26 +26,26 @@ export function DeletePost({slug,userId}:{slug:string,userId:string,currentPage:
         }
     });
     const [open, setOpen] = useState(false);
-    const router=useRouter();
     async function onDelete(){
             await deletePost(slug, userId);
             await deletePostMutation();
             setOpen(false);
     }
+    const t = useTranslations('EditPost');
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="destructive">delete</Button>
+                <Button variant="destructive">{t('delete')}</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Delete post</DialogTitle>
+                    <DialogTitle>{t('deletePost')}</DialogTitle>
                     <DialogDescription>
-                        Are you sure you want to delete this post? All data will be permanently lost.
+                        {t('deleteWarning')}
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
-                    <Button type="destructive" onClick={onDelete}>Delete anyway</Button>
+                    <Button type="destructive" onClick={onDelete}>{t('deleteAnyway')}</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

@@ -1,4 +1,4 @@
-import slugify from "slugify";
+
 
 
 export default async function deletePost(slug:string,userId:string) {
