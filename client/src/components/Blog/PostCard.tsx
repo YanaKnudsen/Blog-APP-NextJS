@@ -6,15 +6,22 @@ import {useTranslations} from "next-intl";
 import {Post} from "@/@types/post";
 import {Dispatch, SetStateAction} from "react";
 import {DeletePost} from "@/components/Blog/DeletePost";
+import fetchPost from "@/actions/client/fetch-post";
 
 
 
 
 
-export default function PostCard({post, setEditMode,setCurrentPostSlug}:{post:Post,setEditMode:Dispatch<SetStateAction<boolean>>,setCurrentPostSlug:Dispatch<SetStateAction<string|undefined>>}) {
+export default function PostCard({post, setEditMode,setPostData}:{post:Post,setEditMode:Dispatch<SetStateAction<boolean>>,setPostData:Dispatch<SetStateAction<Post[]>>}) {
     const router=useRouter();
     const pathname = usePathname()
     const t = useTranslations('PostPage');
+    async function editPost(){
+        setEditMode(true);
+        fetchPost(post.slug).then((res)=>{
+                setPostData(res);
+            })
+    }
     return (
             <Card key={post.slug} className="w-full max-w-xl rounded-lg shadow-lg overflow-hidden">
 
@@ -25,10 +32,7 @@ export default function PostCard({post, setEditMode,setCurrentPostSlug}:{post:Po
                     <div className="flex flex-row gap-2">
                     {post.published ?(<Button onClick={()=>{
                         router.push(`/posts/${post.slug}`);
-                    }}>{t('read')}</Button>):(<><Button onClick={() => {
-                        setEditMode(true);
-                        setCurrentPostSlug(post.slug);
-                    }}>{t('edit')}</Button></>)}
+                    }}>{t('read')}</Button>):(<><Button onClick={editPost}>{t('edit')}</Button></>)}
                         {pathname==="/profile"?(<DeletePost slug={post.slug} userId={post.userId}/>):null}
                     </div>
                     <div className="flex flex-row gap-2 items-center justify-center">

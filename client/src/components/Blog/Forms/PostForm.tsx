@@ -42,7 +42,7 @@ const schema = z.object({
         }),
 });
 
-export default function PostForm({post,setEditMode,editMode=false}:{post?:Post,setEditMode?:Dispatch<SetStateAction<boolean>>,editMode?:boolean}) {
+export default function PostForm({post,setEditMode,editMode=false,setCurrentPostSlug}:{post?:Post,setEditMode?:Dispatch<SetStateAction<boolean>>,editMode?:boolean}) {
 
 
 
@@ -59,7 +59,7 @@ export default function PostForm({post,setEditMode,editMode=false}:{post?:Post,s
             setValue("description",post.description,{ shouldValidate: true })
         }
 
-    },[]);
+    },[post]);
     const {mutateAsync: editPostMutation} = useMutation({
         mutationFn: () => fetchPosts(),
         onSuccess: () => {
@@ -94,12 +94,13 @@ export default function PostForm({post,setEditMode,editMode=false}:{post?:Post,s
         }else{
             const res:Response=await createPost(values.title,values.description,isDraft,userId)
             if(res.ok){
+               // setCurrentPostSlug();
                 reset();
-                await editPostMutation();
                 router.push("/profile")
                 if(editMode && setEditMode){
                     setEditMode(false)
                 }
+                await editPostMutation();
             }else{
                 const error=await res.json();
                 setError("title", { type: "custom", message: error.message })

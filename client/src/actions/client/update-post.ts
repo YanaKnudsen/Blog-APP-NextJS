@@ -13,7 +13,8 @@ export async function updatePost(title:string,description:string,isDraft:boolean
             published: isDraft,
             userId:userId,
             postId:postId,
-    })
+    }),
+        cache: "no-store",
     })
     return res
 

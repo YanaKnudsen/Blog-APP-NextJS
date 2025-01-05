@@ -7,7 +7,7 @@ export async function GET(req: Request) {
     const slug = url.pathname.split("/").pop();
     try {
         const post = await prisma.post.update({
-            where: { slug },
+            where: { slug:slug },
             data: { views: { increment: 1 } },
             include: { user: true },
         });

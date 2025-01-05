@@ -17,29 +17,19 @@ export default function Posts({ page,label,userId=""}:{ page:number,label:string
     const [take]=useState<number>(4);
     const [editMode,setEditMode]=useState<boolean>(false);
     const [currentPostSlug,setCurrentPostSlug]=useState<string>();
-    const [postData,setPostData]=useState<Post>();
+    const [postData,setPostData]=useState<Post[]>();
 
     const { data:postsData } = useQuery({
         queryKey:["posts",currentPage,take,userId],
         queryFn:async ()=>fetchPosts(currentPage,take,userId),
     })
 
-
-    useEffect(() => {
-        if(currentPostSlug){
-            fetchPost(currentPostSlug).then((res)=>{
-                setPostData(res);
-            })
-        }
-    }, [currentPostSlug]);
-
-
     return (
         <div className="flex flex-col h-auto w-full items-center ">
             {editMode?
                 (<>
                     {postData?( <PostForm post={postData} setEditMode={setEditMode}
-                               editMode={editMode}/> ):(<></>)}
+                               editMode={editMode} setCurrentPostSlug={setCurrentPostSlug}/> ):(<></>)}
                 </>):
     (<div>
         <h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0 mb-5">
@@ -47,7 +37,7 @@ export default function Posts({ page,label,userId=""}:{ page:number,label:string
     </h2>
         {postsData?.posts.map((post:Post)=>(
             <div key={post.id} className="w-full flex mb-2 items-center justify-center">
-                <PostCard post={post} setEditMode={setEditMode} setCurrentPostSlug={setCurrentPostSlug} />
+                <PostCard post={post} setEditMode={setEditMode} setPostData={setPostData}/>
             </div>
         ))}
         <PaginationComponent currentPage={currentPage} setCurrentPage={setCurrentPage} take={take} count={postsData?.count} />
