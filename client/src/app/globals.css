@@ -16,29 +16,60 @@ body {
   all: revert;
 }
 .markdown table {
-  @apply table-auto border-collapse border border-gray-300 w-full;
+  @apply table-auto border-collapse border w-full;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  border: 1px solid hsl(var(--border));
+  border-collapse: collapse;
 }
 
-.markdown thead {
-  @apply bg-gray-100;
+table th,
+table td {
+  padding: 0.5rem;
+  text-align: left;
+  border-bottom: 1px solid hsl(var(--border));
 }
 
-.markdown tbody tr:nth-child(even) {
-  @apply bg-gray-50;
+table th {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
 }
 
-.markdown tbody tr:hover {
-  @apply bg-gray-100;
+table tr:nth-child(even) {
+  background-color: hsl(var(--secondary));
 }
 
-.markdown th {
-  @apply border border-gray-300 px-4 py-2 text-left font-bold;
+/* Dark mode table styles */
+.dark table {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  border: 1px solid hsl(var(--border));
 }
 
-.markdown td {
-  @apply border border-gray-300 px-4 py-2;
+.dark table th,
+.dark table td {
+  padding: 0.5rem;
+  text-align: left;
+  border-bottom: 1px solid hsl(var(--border));
 }
 
+.dark table th {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+.dark table tr:nth-child(even) {
+  background-color: hsl(var(--secondary));
+}
+
+/* Optional hover effects for rows */
+table tr:hover {
+  background-color: hsl(var(--muted));
+}
+
+.dark table tr:hover {
+  background-color: hsl(var(--muted-foreground));
+}
 @layer base {
   :root {
     --background:0 0% 100%;
