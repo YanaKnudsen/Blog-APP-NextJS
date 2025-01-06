@@ -15,7 +15,7 @@ export default async function PostPage(props: { params: Promise<{ slug: string ,
 
 
     const postData= await fetchData(slug);
-    const { title: matterTitle, html: markdown } = await markdownToHTML(postData.description);
+    const { title: matterTitle } = await markdownToHTML(postData.description);
     const title = matterTitle? "" : postData.title;
 
 
@@ -23,7 +23,7 @@ export default async function PostPage(props: { params: Promise<{ slug: string ,
 
     return (
             <div className="p-4">
-                <PostInfo post={postData} markdown={markdown} title={title}/>
+                <PostInfo post={postData} title={title}/>
                 <Comment page={page} post={postData}/>
             </div>
 
